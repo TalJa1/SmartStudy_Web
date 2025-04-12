@@ -98,10 +98,18 @@ const LoginView = () => {
       }}
     >
       <Grid
-        columnSpacing={5}
+        columnSpacing={7}
         container
         sx={{ borderRadius: 2, overflow: "hidden" }}
       >
+        <Grid size={{ xs: 12, md: 12 }} sx={{ mb: 5 }}>
+          <Box>
+            <Typography component="h1" variant="h4" sx={{ fontWeight: "bold" }}>
+              SMART STUDY PLANNER
+            </Typography>
+          </Box>
+        </Grid>
+
         {/* Left side - Login Form */}
         <Grid size={{ xs: 12, md: 7 }}>
           <Box
@@ -126,7 +134,7 @@ const LoginView = () => {
             <Box
               component="form"
               onSubmit={handleSubmit}
-              sx={{ width: "100%", maxWidth: 400 }}
+              sx={{ width: "100%" }}
             >
               <TextField
                 margin="normal"
