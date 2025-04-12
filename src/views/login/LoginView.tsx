@@ -1,15 +1,32 @@
-import { TextField, Button, Typography, Box, Link } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Link,
+  Divider,
+} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import loginImg from "../../assets/login/login.png";
+import AppleIcon from "@mui/icons-material/Apple";
+import Facebook from "../../assets/login/facebook.png";
+import Google from "../../assets/login/google.png";
+import React, { useState } from "react";
+import { LoginInterface } from "../../models/login/loginInterface";
 
 const LoginView = () => {
   document.title = "Smart Login";
+  const [loginForm, setLoginForm] = useState<LoginInterface>({
+    email: "PhucNguyen@gmail.com",
+    password: "123",
+  })
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     // Add login logic here
     console.log("Login attempt");
   };
+
   return (
     <Box
       sx={{
@@ -60,6 +77,8 @@ const LoginView = () => {
                 autoComplete="email"
                 autoFocus
                 variant="outlined"
+                value={loginForm.email}
+                onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
               />
               <TextField
                 margin="normal"
@@ -71,6 +90,8 @@ const LoginView = () => {
                 id="password"
                 autoComplete="current-password"
                 variant="outlined"
+                value={loginForm.password}
+                onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
               />
 
               <Button
@@ -99,6 +120,94 @@ const LoginView = () => {
                     Đăng ký
                   </Link>
                 </Typography>
+              </Box>
+
+              {/* Social login section */}
+              <Box sx={{ width: "100%", mt: 3, mb: 2 }}>
+                <Divider sx={{ my: 2 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Hoặc đăng nhập với
+                  </Typography>
+                </Divider>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    mt: 2,
+                  }}
+                >
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                      mr: 1,
+                      minWidth: "64px",
+                      height: "40px",
+                      padding: "6px",
+                      borderColor: "#1C1E30",
+                      "&:hover": {
+                        borderColor: "#1877F2",
+                        backgroundColor: "rgba(24, 119, 242, 0.04)",
+                      },
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={Facebook}
+                      alt="Facebook"
+                      style={{ width: 24, height: 24 }}
+                    />
+                  </Button>
+
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                      mx: 1,
+                      minWidth: "64px",
+                      height: "40px",
+                      padding: "6px",
+                      borderColor: "#1C1E30",
+                      "&:hover": {
+                        borderColor: "#DB4437",
+                        backgroundColor: "rgba(219, 68, 55, 0.04)",
+                      },
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={Google}
+                      alt="Google"
+                      style={{ width: 24, height: 24 }}
+                    />
+                  </Button>
+
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      flex: 1,
+                      ml: 1,
+                      minWidth: "64px",
+                      height: "40px",
+                      padding: "6px",
+                      borderColor: "#1C1E30",
+                      "&:hover": {
+                        borderColor: "#000000",
+                        backgroundColor: "rgba(0, 0, 0, 0.04)",
+                      },
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <AppleIcon sx={{ color: "#000000" }} />
+                  </Button>
+                </Box>
               </Box>
             </Box>
           </Box>
