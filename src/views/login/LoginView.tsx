@@ -1,10 +1,4 @@
-import {
-  TextField,
-  Button,
-  Typography,
-  Box,
-  Link,
-} from "@mui/material";
+import { TextField, Button, Typography, Box, Link } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import loginImg from "../../assets/login/login.png";
 
@@ -26,11 +20,12 @@ const LoginView = () => {
       }}
     >
       <Grid
+        columnSpacing={5}
         container
-        sx={{ borderRadius: 2, overflow: "hidden"}}
+        sx={{ borderRadius: 2, overflow: "hidden" }}
       >
         {/* Left side - Login Form */}
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid size={{ xs: 12, md: 7 }}>
           <Box
             sx={{
               display: "flex",
@@ -40,14 +35,16 @@ const LoginView = () => {
               justifyContent: "center",
             }}
           >
-            <Typography
-              component="h1"
-              variant="h4"
-              sx={{ mb: 4, fontWeight: "bold" }}
-            >
-              Welcome back
-            </Typography>
-
+            <Box sx={{ width: "100%", mb: 2 }}>
+              <Typography
+                component="h1"
+                variant="h4"
+                sx={{ fontWeight: "bold", textAlign: "left" }}
+              >
+                Đăng nhập
+              </Typography>
+              <Box>Đăng nhập để truy cập tài khoản của bạn</Box>
+            </Box>
             <Box
               component="form"
               onSubmit={handleSubmit}
@@ -75,24 +72,31 @@ const LoginView = () => {
                 autoComplete="current-password"
                 variant="outlined"
               />
-              <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Box>
+
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, py: 1.5 }}
+                sx={{
+                  mt: 3,
+                  mb: 2,
+                  py: 1.5,
+                  color: "white",
+                  backgroundColor: "#092C4C",
+                }}
               >
-                Sign In
+                Đăng nhập
               </Button>
               <Box sx={{ mt: 2, textAlign: "center" }}>
                 <Typography variant="body2">
-                  Don't have an account?{" "}
-                  <Link href="#" variant="body2">
-                    Sign up
+                  Chưa có tài khoản?{" "}
+                  <Link
+                    href="#"
+                    sx={{
+                      color: "#DB3232",
+                    }}
+                  >
+                    Đăng ký
                   </Link>
                 </Typography>
               </Box>
@@ -102,7 +106,7 @@ const LoginView = () => {
 
         {/* Right side - Image */}
         <Grid
-          size={{ xs: 12, md: 6 }}
+          size={{ xs: 12, md: 5 }}
           sx={{
             display: { xs: "none", md: "flex" },
             justifyContent: "center",
