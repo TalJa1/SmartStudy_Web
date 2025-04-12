@@ -1,11 +1,9 @@
 import {
-  Container,
   TextField,
   Button,
   Typography,
   Box,
   Link,
-  Paper,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import loginImg from "../../assets/login/login.png";
@@ -19,14 +17,17 @@ const LoginView = () => {
     console.log("Login attempt");
   };
   return (
-    <Container>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100vw",
+      }}
+    >
       <Grid
-        size={12}
         container
-        spacing={2}
-        component={Paper}
-        elevation={3}
-        sx={{ borderRadius: 2, overflow: "hidden" }}
+        sx={{ borderRadius: 2, overflow: "hidden"}}
       >
         {/* Left side - Login Form */}
         <Grid size={{ xs: 12, md: 6 }}>
@@ -120,7 +121,7 @@ const LoginView = () => {
           />
         </Grid>
       </Grid>
-    </Container>
+    </Box>
   );
 };
 
