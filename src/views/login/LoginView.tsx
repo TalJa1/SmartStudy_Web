@@ -8,7 +8,6 @@ import {
   Paper,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import "../../styles/login/loginPage.css";
 import loginImg from "../../assets/login/login.png";
 
 const LoginView = () => {
@@ -20,8 +19,9 @@ const LoginView = () => {
     console.log("Login attempt");
   };
   return (
-    <Container className="fullView">
+    <Container>
       <Grid
+        size={12}
         container
         spacing={2}
         component={Paper}
