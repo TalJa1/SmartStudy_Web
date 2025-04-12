@@ -11,7 +11,7 @@ import loginImg from "../../assets/login/login.png";
 import AppleIcon from "@mui/icons-material/Apple";
 import Facebook from "../../assets/login/facebook.png";
 import Google from "../../assets/login/google.png";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LoginInterface } from "../../models/login/loginInterface";
 
 const LoginView = () => {
@@ -19,12 +19,73 @@ const LoginView = () => {
   const [loginForm, setLoginForm] = useState<LoginInterface>({
     email: "PhucNguyen@gmail.com",
     password: "123",
-  })
+  });
+
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
+  // Add form validity state
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  // Validation functions
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return "Please enter a valid email address";
+    }
+    return "";
+  };
+
+  const validatePassword = (password: string) => {
+    const digitCount = (password.match(/\d/g) || []).length;
+    if (digitCount < 3) {
+      return "Password must contain at least 3 digits";
+    }
+    return "";
+  };
+
+  // Handle email change with validation
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const email = e.target.value;
+    setLoginForm({ ...loginForm, email });
+    setErrors({
+      ...errors,
+      email: validateEmail(email),
+    });
+  };
+
+  // Handle password change with validation
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const password = e.target.value;
+    setLoginForm({ ...loginForm, password });
+    setErrors({
+      ...errors,
+      password: validatePassword(password),
+    });
+  };
+
+  // Check form validity whenever inputs or errors change
+  useEffect(() => {
+    const emailError = validateEmail(loginForm.email);
+    const passwordError = validatePassword(loginForm.password);
+
+    setErrors({
+      email: emailError,
+      password: passwordError,
+    });
+
+    setIsFormValid(!emailError && !passwordError);
+  }, [loginForm]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Add login logic here
-    console.log("Login attempt");
+
+    // Check validation before submission
+    if (isFormValid) {
+      console.log("Login attempt", loginForm);
+    }
   };
 
   return (
@@ -78,7 +139,9 @@ const LoginView = () => {
                 autoFocus
                 variant="outlined"
                 value={loginForm.email}
-                onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
+                onChange={handleEmailChange}
+                error={!!errors.email}
+                helperText={errors.email}
               />
               <TextField
                 margin="normal"
@@ -91,9 +154,10 @@ const LoginView = () => {
                 autoComplete="current-password"
                 variant="outlined"
                 value={loginForm.password}
-                onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                onChange={handlePasswordChange}
+                error={!!errors.password}
+                helperText={errors.password}
               />
-
               <Button
                 type="submit"
                 fullWidth
