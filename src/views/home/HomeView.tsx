@@ -9,6 +9,7 @@ import { getLearningData } from "../../services/home/learningService";
 import PercentProgress from "../../components/home/PercentProgress";
 
 const HomeView = () => {
+  document.title = "Tổng quan";
   const [name, setName] = useState<string>("Nguyên");
   const learningData = getLearningData();
 
@@ -90,61 +91,58 @@ const HomeView = () => {
                   <Grid
                     container
                     sx={{
-                      fontWeight: "bold",
-                      color: "#1C1E30",
+                      color: "#84868A",
                       textAlign: "center",
                       width: "100%",
                     }}
                   >
-                    <Grid size={2}>
-                      Môn
-                    </Grid>
-                    <Grid size={2}>
-                      Mục tiêu
-                    </Grid>
-                    <Grid size={2}>
-                      Tiến độ
-                    </Grid>
-                    <Grid size={2}>
-                      BĐ
-                    </Grid>
-                    <Grid size={2}>
-                      KT
-                    </Grid>
-                    <Grid size={2}>
-                      Phân loại
-                    </Grid>
+                    <Grid size={2}>Môn</Grid>
+                    <Grid size={2}>Mục tiêu</Grid>
+                    <Grid size={2}>Tiến độ</Grid>
+                    <Grid size={2}>BĐ</Grid>
+                    <Grid size={2}>KT</Grid>
+                    <Grid size={2}>Phân loại</Grid>
                   </Grid>
                 </Grid>
                 {learningData.map((item, index) => (
-                  <Grid key={index} sx={{ width: "100%", mt:2 }}>
+                  <Grid key={index} sx={{ width: "100%", mt: 2 }}>
                     <Grid
                       container
                       sx={{
-                        color: "#4F4F4F",
+                        color: "black",
                         textAlign: "center",
                       }}
                     >
-                      <Grid size={2}>
+                      <Grid size={2} sx={{ wordWrap: "break-word", fontWeight:700 }}>
                         {item.subject}
                       </Grid>
-                      <Grid size={2}>
+                      <Grid size={2} sx={{ wordWrap: "break-word" }}>
                         {item.goal}
                       </Grid>
-                      <Grid size={2}>
-                        <PercentProgress progress={parseInt(item.progress)} />
+                      <Grid size={2} sx={{ wordWrap: "break-word" }}>
+                        {item.progress}
                       </Grid>
-                      <Grid size={2}>
+                      <Grid size={2} sx={{ wordWrap: "break-word" }}>
                         {item.startDate}
                       </Grid>
-                      <Grid size={2}>
+                      <Grid size={2} sx={{ wordWrap: "break-word" }}>
                         {item.endDate}
                       </Grid>
-                      <Grid size={2}>
+                      <Grid size={2} sx={{ wordWrap: "break-word" }}>
                         {item.category}
                       </Grid>
                     </Grid>
-                    <Box sx={{ mt: 1, color: "#828282", fontSize: "14px" }}>
+                    <Box
+                      sx={{
+                        mt: 1,
+                        p: 2,
+                        fontSize: "14px",
+                        borderRadius: "8px",
+                        backgroundColor:
+                          Math.random() > 0.5 ? "#FFE4E4" : "#E1E2F6",
+                      }}
+                    >
+                      <Box sx={{ fontWeight: "bold", mb: 1 }}>{item.title}</Box>
                       {item.description}
                     </Box>
                   </Grid>
