@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // src/components/ManualCalendarGrid.tsx
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import {
   Box,
   Button,
@@ -14,15 +14,8 @@ import {
   useTheme,
   alpha,
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
+  Grid,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -47,6 +40,8 @@ import {
   CalendarEvent,
   EventCategory,
 } from "../../services/calendar/calendarData"; // Adjust path
+import EventDetailCard from "./EventDetailCard";
+import MiniCalendarModal from "./MiniCalendarModal";
 
 // --- Event Colors Helper --- (Same as before)
 const getEventColor = (
@@ -66,63 +61,89 @@ const getEventColor = (
   }
 };
 
-const availableCategories: EventCategory[] = ['Lịch học', 'Kiểm tra', 'Kỳ thi', 'Sự kiện', 'Khác'];
-
 // --- Calendar Component ---
 const ManualCalendarGrid = () => {
   const theme = useTheme();
-  const [currentMonth, setCurrentMonth] = useState(new Date(2025, 3, 1)); // Start in April 2025
-  const [currentView, setCurrentView] = useState("month"); // Only month implemented here
+  const [currentMonth, setCurrentMonth] = useState(new Date(2025, 3, 1));
+  const [currentView, setCurrentView] = useState("month");
   const [events, setEvents] = useState<CalendarEvent[]>(mockCalendarEvents);
-
   const [monthAnchorEl, setMonthAnchorEl] = useState<null | HTMLElement>(null);
   const isMonthMenuOpen = Boolean(monthAnchorEl);
 
-  // --- Date Calculations for the Grid ---
+  // --- Renamed State for Modal ---
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false); // <-- Renamed
+  const [selectedDateForView, setSelectedDateForView] = useState<Date | null>(
+    null
+  ); // <-- Renamed
+
+  // --- Calculations ---
   const daysInGrid = useMemo(() => {
+    // ... (no changes needed here)
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(currentMonth);
-    // Adjust week start to Monday (1) for Vietnamese locale standard
     const startDate = startOfWeek(monthStart, { locale: vi, weekStartsOn: 1 });
     const endDate = endOfWeek(monthEnd, { locale: vi, weekStartsOn: 1 });
-
     return eachDayOfInterval({ start: startDate, end: endDate });
   }, [currentMonth]);
 
-  // --- Filter Events for a Specific Day ---
-  const getEventsForDay = (day: Date): CalendarEvent[] => {
-    return events.filter((event) => isSameDay(event.start, day));
-    // Basic filtering: doesn't account for multi-day events spanning across this day yet
-    // Add more complex logic here if needed (e.g., check if 'day' is within event.start/end interval)
-  };
+  const getEventsForDay = useCallback(
+    (day: Date): CalendarEvent[] => {
+      // ... (no changes needed here)
+      return events.filter((event) => isSameDay(event.start, day));
+    },
+    [events]
+  );
+
+  // Filter events specifically for the modal's selected date
+  const eventsForSelectedDay = useMemo(() => {
+    if (!selectedDateForView) return [];
+    return getEventsForDay(selectedDateForView);
+  }, [getEventsForDay, selectedDateForView]); // Depend on main events list and selected date
 
   // --- Handlers ---
   const handleViewChange = (event: React.SyntheticEvent, newValue: string) => {
-    // Only month view is implemented in this example
-    if (newValue === "month") {
-      setCurrentView(newValue);
-    } else {
-      alert(`${newValue} view not implemented in this example.`);
-    }
+    // ... (no changes needed here)
+    if (newValue === "month") setCurrentView(newValue);
+    else alert(`${newValue} view not implemented in this example.`);
   };
 
   const handleMonthMenuOpen = (event: React.MouseEvent<HTMLElement>) =>
     setMonthAnchorEl(event.currentTarget);
   const handleMonthMenuClose = () => setMonthAnchorEl(null);
-
   const handleNavigate = (action: "prev" | "next" | "today") => {
+    // ... (no changes needed here)
     if (action === "prev") setCurrentMonth(subMonths(currentMonth, 1));
     if (action === "next") setCurrentMonth(addMonths(currentMonth, 1));
-    if (action === "today") setCurrentMonth(new Date()); // Go to current real-world month
+    if (action === "today") setCurrentMonth(new Date());
     handleMonthMenuClose();
   };
-
   const handleEventClick = (event: CalendarEvent) => {
     console.log("Event clicked:", event.title);
-    // Add logic to show event details
   };
 
-  // --- Render Logic ---
+  // --- Updated Day Click Handler (for opening VIEW modal) ---
+  const handleDayClick = (day: Date) => {
+    console.log("Day selected for viewing:", day);
+    setSelectedDateForView(day); // Set the date to view
+    setIsViewModalOpen(true); // Open the VIEW modal
+  };
+
+  // --- Close Handler for VIEW modal ---
+  const handleCloseViewModal = () => {
+    setIsViewModalOpen(false);
+    // Optionally clear the selected date when closing
+    // setSelectedDateForView(null);
+  };
+
+  // --- Placeholder Handler for "Add Event" button in VIEW modal ---
+  const handleOpenAddForm = () => {
+    console.log("Trigger Add Event form for date:", selectedDateForView);
+    // Typically:
+    // 1. Close this view modal: handleCloseViewModal();
+    // 2. Open a *different* modal with the Add Event Form
+    alert("Chức năng thêm sự kiện chưa được triển khai.");
+  };
+
   const dayLabels = [
     "Thứ 2",
     "Thứ 3",
@@ -131,65 +152,7 @@ const ManualCalendarGrid = () => {
     "Thứ 6",
     "Thứ 7",
     "Chủ nhật",
-  ]; // Monday first
-
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [selectedDateForAdd, setSelectedDateForAdd] = useState<Date | null>(
-    null
-  );
-  const [newEventTitle, setNewEventTitle] = useState("");
-  const [newEventCategory, setNewEventCategory] =
-    useState<EventCategory>("Lịch học"); // Default category
-  const [newEventDescription, setNewEventDescription] = useState("");
-  // Add state for time if you want timed events
-  // const [newEventTime, setNewEventTime] = useState('');
-
-  // ... existing calculations and handlers
-
-  // --- Modal Handlers ---
-  const handleOpenAddModal = (day: Date) => {
-    setSelectedDateForAdd(day);
-    // Reset form fields when opening
-    setNewEventTitle("");
-    setNewEventCategory("Lịch học");
-    setNewEventDescription("");
-    setIsAddModalOpen(true);
-  };
-
-  const handleCloseAddModal = () => {
-    setIsAddModalOpen(false);
-    setSelectedDateForAdd(null); // Clear selected date on close
-  };
-
-  const handleAddEvent = () => {
-    if (!newEventTitle || !selectedDateForAdd) {
-      alert("Vui lòng nhập tiêu đề."); // Simple validation
-      return;
-    }
-
-    // Create the new event object
-    const newEvent: CalendarEvent = {
-      // Generate a simple unique ID (use a proper UUID library in real apps)
-      id: `event-${Date.now()}-${Math.random()}`,
-      title: newEventTitle,
-      // Set start date. Combine with time if time input exists, otherwise make it allDay
-      start: selectedDateForAdd, // For now, treat as all-day
-      allDay: true, // Defaulting to allDay for simplicity
-      category: newEventCategory,
-      description: newEventDescription,
-    };
-
-    // Update the events state
-    setEvents((prevEvents) => [...prevEvents, newEvent]);
-
-    handleCloseAddModal(); // Close modal after adding
-  };
-
-  // --- Modify Day Click Handler ---
-  const handleDayClick = (day: Date) => {
-    console.log("Day clicked:", day);
-    handleOpenAddModal(day); // Open the modal for this day
-  };
+  ];
 
   return (
     <Box
@@ -502,71 +465,106 @@ const ManualCalendarGrid = () => {
           })}
         </Box>
       </Box>
-
-      <Dialog open={isAddModalOpen} onClose={handleCloseAddModal}>
-        <DialogTitle>Thêm hoạt động mới</DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ mb: 2 }}>
-            Thêm sự kiện cho ngày:{" "}
-            {selectedDateForAdd
-              ? format(selectedDateForAdd, "dd/MM/yyyy", { locale: vi })
-              : ""}
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="title"
-            label="Tiêu đề"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={newEventTitle}
-            onChange={(e) => setNewEventTitle(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <FormControl fullWidth margin="dense" sx={{ mb: 2 }}>
-            <InputLabel id="category-select-label">Loại</InputLabel>
-            <Select
-              labelId="category-select-label"
-              id="category"
-              value={newEventCategory}
-              label="Loại"
-              onChange={(e) =>
-                setNewEventCategory(e.target.value as EventCategory)
-              }
-              variant="outlined"
+      <Dialog
+        open={isViewModalOpen} // <-- Use renamed state
+        onClose={handleCloseViewModal} // <-- Use specific close handler
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: { height: "85vh", maxHeight: "650px", borderRadius: "16px" },
+        }} // Rounded corners for dialog
+        sx={{ backdropFilter: "blur(3px)" }} // Optional: blurred background
+      >
+        <DialogContent sx={{ p: 0, height: "100%", overflow: "hidden" }}>
+          <Grid container sx={{ height: "100%" }}>
+            {/* Left Side: Mini Calendar */}
+            <Grid
+              size={{ xs: 12, md: 5 }}
+              sx={{
+                borderRight: { md: "1px solid" },
+                borderColor: { md: "divider" },
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                backgroundColor: "#f8f9fa",
+              }}
             >
-              {availableCategories.map((cat) => (
-                <MenuItem key={cat} value={cat}>
-                  {cat}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            margin="dense"
-            id="description"
-            label="Mô tả (tùy chọn)"
-            type="text"
-            fullWidth
-            multiline
-            rows={2}
-            variant="outlined"
-            value={newEventDescription}
-            onChange={(e) => setNewEventDescription(e.target.value)}
-          />
-          {/* Add Time Input here if needed */}
+              {" "}
+              {/* Light background for calendar */}
+              {selectedDateForView && (
+                <MiniCalendarModal
+                  initialDate={selectedDateForView}
+                  selectedDate={selectedDateForView}
+                  onClose={handleCloseViewModal}
+                />
+              )}
+            </Grid>
+
+            {/* Right Side: Event List */}
+            <Grid
+              size={{ xs: 12, md: 7 }}
+              sx={{
+                p: 2.5,
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                overflow: "hidden",
+              }}
+            >
+              {" "}
+              {/* Increased padding */}
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: "bold",
+                  color: "#D32F2F",
+                  mb: 2,
+                  flexShrink: 0,
+                }}
+              >
+                {selectedDateForView
+                  ? format(
+                      selectedDateForView,
+                      "'Ngày' dd 'tháng' MM 'năm' yyyy",
+                      { locale: vi }
+                    )
+                  : "Chọn ngày"}
+              </Typography>
+              <Box sx={{ flexGrow: 1, overflowY: "auto", mb: 2, pr: 1 }}>
+                {" "}
+                {/* Scrollable event list with padding right */}
+                {eventsForSelectedDay.length > 0 ? (
+                  eventsForSelectedDay.map((event) => (
+                    <EventDetailCard key={event.id} event={event} />
+                  ))
+                ) : (
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ textAlign: "center", mt: 4 }}
+                  >
+                    Không có sự kiện nào cho ngày này.
+                  </Typography>
+                )}
+              </Box>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={handleOpenAddForm} // Trigger function to open actual ADD form
+                sx={{
+                  backgroundColor: "#1C2A3A",
+                  "&:hover": { backgroundColor: "#334257" },
+                  mt: "auto", // Push to bottom
+                  flexShrink: 0,
+                  borderRadius: "8px", // Rounded
+                  py: 1.2, // Taller button
+                }}
+              >
+                Thêm sự kiện
+              </Button>
+            </Grid>
+          </Grid>
         </DialogContent>
-        <DialogActions sx={{ p: "16px 24px" }}>
-          <Button onClick={handleCloseAddModal}>Hủy</Button>
-          <Button
-            onClick={handleAddEvent}
-            variant="contained"
-            disabled={!newEventTitle} // Disable if title is empty
-          >
-            Thêm
-          </Button>
-        </DialogActions>
       </Dialog>
     </Box>
   );
