@@ -9,6 +9,8 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/material";
+import logo from "../assets/sidebar/logo.png";
 
 const Sidebar: React.FC = () => {
   const [activeTab, setActiveTab] = useState("Tổng quan");
@@ -28,6 +30,12 @@ const Sidebar: React.FC = () => {
 
   return (
     <S style={{ height: "100vh" }}>
+      <Box sx={{ margin: "8px" }}>
+        <img src={logo} width={130} />
+        <Box sx={{ fontSize: "15px", textAlign: "center" }}>
+          Smart Study Planner
+        </Box>
+      </Box>
       <Menu>
         <MenuItem
           icon={<HomeFilledIcon />}
