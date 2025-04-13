@@ -42,6 +42,7 @@ import {
 } from "../../services/calendar/calendarData"; // Adjust path
 import EventDetailCard from "./EventDetailCard";
 import MiniCalendarModal from "./MiniCalendarModal";
+import AddEventForm from "./AddEventForm";
 
 // --- Event Colors Helper --- (Same as before)
 const getEventColor = (
@@ -70,15 +71,16 @@ const ManualCalendarGrid = () => {
   const [monthAnchorEl, setMonthAnchorEl] = useState<null | HTMLElement>(null);
   const isMonthMenuOpen = Boolean(monthAnchorEl);
 
-  // --- Renamed State for Modal ---
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false); // <-- Renamed
-  const [selectedDateForView, setSelectedDateForView] = useState<Date | null>(
+  // --- State for Modal ---
+  const [isModalOpen, setIsModalOpen] = useState(false); // Single state to open/close modal
+  const [selectedDateForModal, setSelectedDateForModal] = useState<Date | null>(
     null
-  ); // <-- Renamed
+  );
+  const [modalMode, setModalMode] = useState<"view" | "add">("view"); // Track modal mode ('view' or 'add')
 
   // --- Calculations ---
   const daysInGrid = useMemo(() => {
-    // ... (no changes needed here)
+    /* ...no change... */
     const monthStart = startOfMonth(currentMonth);
     const monthEnd = endOfMonth(currentMonth);
     const startDate = startOfWeek(monthStart, { locale: vi, weekStartsOn: 1 });
@@ -88,61 +90,79 @@ const ManualCalendarGrid = () => {
 
   const getEventsForDay = useCallback(
     (day: Date): CalendarEvent[] => {
-      // ... (no changes needed here)
+      /* ...no change... */
       return events.filter((event) => isSameDay(event.start, day));
     },
     [events]
-  );
+  ); // Depend on events state
 
-  // Filter events specifically for the modal's selected date
   const eventsForSelectedDay = useMemo(() => {
-    if (!selectedDateForView) return [];
-    return getEventsForDay(selectedDateForView);
-  }, [getEventsForDay, selectedDateForView]); // Depend on main events list and selected date
+    // Filter events for the VIEW mode
+    if (!selectedDateForModal) return [];
+    return getEventsForDay(selectedDateForModal);
+  }, [getEventsForDay, selectedDateForModal]); // Depend on function and selected date
 
   // --- Handlers ---
   const handleViewChange = (event: React.SyntheticEvent, newValue: string) => {
-    // ... (no changes needed here)
+    /* ...no change... */
     if (newValue === "month") setCurrentView(newValue);
     else alert(`${newValue} view not implemented in this example.`);
   };
-
   const handleMonthMenuOpen = (event: React.MouseEvent<HTMLElement>) =>
     setMonthAnchorEl(event.currentTarget);
   const handleMonthMenuClose = () => setMonthAnchorEl(null);
   const handleNavigate = (action: "prev" | "next" | "today") => {
-    // ... (no changes needed here)
+    /* ...no change... */
     if (action === "prev") setCurrentMonth(subMonths(currentMonth, 1));
     if (action === "next") setCurrentMonth(addMonths(currentMonth, 1));
     if (action === "today") setCurrentMonth(new Date());
     handleMonthMenuClose();
   };
   const handleEventClick = (event: CalendarEvent) => {
+    /* ...no change... */
     console.log("Event clicked:", event.title);
   };
 
-  // --- Updated Day Click Handler (for opening VIEW modal) ---
+  // --- Modal Open Handler ---
   const handleDayClick = (day: Date) => {
-    console.log("Day selected for viewing:", day);
-    setSelectedDateForView(day); // Set the date to view
-    setIsViewModalOpen(true); // Open the VIEW modal
+    console.log("Day selected:", day);
+    setSelectedDateForModal(day); // Set the selected date
+    setModalMode("view"); // <<-- Always start in view mode
+    setIsModalOpen(true); // Open the modal
   };
 
-  // --- Close Handler for VIEW modal ---
-  const handleCloseViewModal = () => {
-    setIsViewModalOpen(false);
-    // Optionally clear the selected date when closing
-    // setSelectedDateForView(null);
+  // --- Modal Close Handler ---
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    // Optionally reset mode or selected date if needed, but usually not necessary
+    // setModalMode('view');
+    // setSelectedDateForModal(null);
   };
 
-  // --- Placeholder Handler for "Add Event" button in VIEW modal ---
-  const handleOpenAddForm = () => {
-    console.log("Trigger Add Event form for date:", selectedDateForView);
-    // Typically:
-    // 1. Close this view modal: handleCloseViewModal();
-    // 2. Open a *different* modal with the Add Event Form
-    alert("Chức năng thêm sự kiện chưa được triển khai.");
+  // --- Handler to switch Modal to ADD mode ---
+  const handleSwitchToAddMode = () => {
+    setModalMode("add");
   };
+
+  // --- Handler to switch Modal back to VIEW mode (Cancel from AddForm) ---
+  const handleSwitchToViewMode = () => {
+    setModalMode("view");
+  };
+
+  // --- Handler to SAVE event from AddForm ---
+  const handleSaveNewEvent = (newEvent: CalendarEvent) => {
+    console.log("Saving new event:", newEvent);
+    setEvents((prevEvents) => [...prevEvents, newEvent]);
+    // Option 1: Close modal completely after saving
+    // handleCloseModal();
+
+    // Option 2: Switch back to view mode for the same date after saving
+    setModalMode("view");
+  };
+
+  // --- Get User Info (Replace with actual logic) ---
+  const loggedInUserName = "Phúc Nguyễn";
+  const userAvatarSrc = undefined; // Use placeholder from AddEventForm or pass real one
 
   const dayLabels = [
     "Thứ 2",
@@ -466,18 +486,19 @@ const ManualCalendarGrid = () => {
         </Box>
       </Box>
       <Dialog
-        open={isViewModalOpen} // <-- Use renamed state
-        onClose={handleCloseViewModal} // <-- Use specific close handler
-        maxWidth="md"
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        maxWidth="md" // Or potentially "lg" if the form needs more space
         fullWidth
+        // Adjust PaperProps for desired height and potentially width breakpoints
         PaperProps={{
-          sx: { height: "85vh", maxHeight: "650px", borderRadius: "16px" },
-        }} // Rounded corners for dialog
+          sx: { height: "85vh", maxHeight: "700px", borderRadius: "16px" },
+        }}
         sx={{ backdropFilter: "blur(3px)" }} // Optional: blurred background
       >
         <DialogContent sx={{ p: 0, height: "100%", overflow: "hidden" }}>
           <Grid container sx={{ height: "100%" }}>
-            {/* Left Side: Mini Calendar */}
+            {/* Left Side: Mini Calendar (Always Visible) */}
             <Grid
               size={{ xs: 12, md: 5 }}
               sx={{
@@ -489,79 +510,103 @@ const ManualCalendarGrid = () => {
                 backgroundColor: "#f8f9fa",
               }}
             >
-              {" "}
-              {/* Light background for calendar */}
-              {selectedDateForView && (
+              {selectedDateForModal && (
                 <MiniCalendarModal
-                  initialDate={selectedDateForView}
-                  selectedDate={selectedDateForView}
-                  onClose={handleCloseViewModal}
+                  initialDate={selectedDateForModal}
+                  selectedDate={selectedDateForModal}
+                  onClose={handleCloseModal} // Close button closes the whole dialog
                 />
               )}
             </Grid>
 
-            {/* Right Side: Event List */}
+            {/* Right Side: Conditional Rendering (View List OR Add Form) */}
             <Grid
               size={{ xs: 12, md: 7 }}
               sx={{
-                p: 2.5,
                 display: "flex",
                 flexDirection: "column",
                 height: "100%",
                 overflow: "hidden",
               }}
             >
-              {" "}
-              {/* Increased padding */}
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: "bold",
-                  color: "#D32F2F",
-                  mb: 2,
-                  flexShrink: 0,
-                }}
-              >
-                {selectedDateForView
-                  ? format(
-                      selectedDateForView,
+              {selectedDateForModal && modalMode === "view" && (
+                // --- VIEW MODE CONTENT ---
+                <Box
+                  sx={{
+                    p: 2.5,
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    overflow: "hidden",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: "bold",
+                      color: "#D32F2F",
+                      mb: 2,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {format(
+                      selectedDateForModal,
                       "'Ngày' dd 'tháng' MM 'năm' yyyy",
                       { locale: vi }
-                    )
-                  : "Chọn ngày"}
-              </Typography>
-              <Box sx={{ flexGrow: 1, overflowY: "auto", mb: 2, pr: 1 }}>
-                {" "}
-                {/* Scrollable event list with padding right */}
-                {eventsForSelectedDay.length > 0 ? (
-                  eventsForSelectedDay.map((event) => (
-                    <EventDetailCard key={event.id} event={event} />
-                  ))
-                ) : (
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ textAlign: "center", mt: 4 }}
-                  >
-                    Không có sự kiện nào cho ngày này.
+                    )}
                   </Typography>
-                )}
-              </Box>
-              <Button
-                variant="contained"
-                fullWidth
-                onClick={handleOpenAddForm} // Trigger function to open actual ADD form
-                sx={{
-                  backgroundColor: "#1C2A3A",
-                  "&:hover": { backgroundColor: "#334257" },
-                  mt: "auto", // Push to bottom
-                  flexShrink: 0,
-                  borderRadius: "8px", // Rounded
-                  py: 1.2, // Taller button
-                }}
-              >
-                Thêm sự kiện
-              </Button>
+                  {/* Scrollable Event List */}
+                  <Box sx={{ flexGrow: 1, overflowY: "auto", mb: 2, pr: 1 }}>
+                    {eventsForSelectedDay.length > 0 ? (
+                      eventsForSelectedDay.map((event) => (
+                        <EventDetailCard key={event.id} event={event} />
+                      ))
+                    ) : (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ textAlign: "center", mt: 4 }}
+                      >
+                        {" "}
+                        Không có sự kiện nào cho ngày này.{" "}
+                      </Typography>
+                    )}
+                  </Box>
+                  {/* Button to switch to Add Mode */}
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    onClick={handleSwitchToAddMode} // <-- Switch to ADD mode
+                    sx={{
+                      backgroundColor: "#e0e0e0",
+                      color: theme.palette.text.primary,
+                      "&:hover": { backgroundColor: "#bdbdbd" },
+                      mt: "auto",
+                      flexShrink: 0,
+                      borderRadius: "8px",
+                      py: 1.2,
+                      fontWeight: "medium",
+                      boxShadow: "none",
+                      textTransform: "none",
+                    }}
+                  >
+                    Thêm sự kiện
+                  </Button>
+                </Box>
+                // --- END VIEW MODE CONTENT ---
+              )}
+
+              {selectedDateForModal && modalMode === "add" && (
+                // --- ADD MODE CONTENT ---
+                <AddEventForm
+                  selectedDate={selectedDateForModal}
+                  userName={loggedInUserName}
+                  avatarSrc={userAvatarSrc}
+                  onSave={handleSaveNewEvent} // <-- Pass save handler
+                  onCancel={handleSwitchToViewMode} // <-- Pass cancel handler (goes back to view)
+                />
+                // --- END ADD MODE CONTENT ---
+              )}
             </Grid>
           </Grid>
         </DialogContent>
