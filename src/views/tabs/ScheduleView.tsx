@@ -15,9 +15,6 @@ const ScheduleView = () => {
           <HeaderSearchBar userName={loggedInUserName} />
         </Box>
         <Box sx={{ flexGrow: 1, overflow: "hidden", width: "100%" }}>
-          {" "}
-          {/* Let content inside scroll */}
-          {/* Replace FullCalendarPage with the manual one */}
           <ManualCalendarGrid />
         </Box>
       </div>
