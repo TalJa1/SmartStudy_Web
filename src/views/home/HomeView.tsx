@@ -12,21 +12,42 @@ const HomeView = () => {
       <Box style={{ padding: "20px" }}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, sm: 8 }}>
-            <Box
-              display="flex"
-              alignItems="center"
-              sx={{ color: "#1C1E30", fontSize: "24px", fontWeight: "700" }}
-            >
-              Xin chào {name} <img src={wavinghand} width={30} />
+            <Box sx={{ m: 2 }}>
+              <Box
+                display="flex"
+                alignItems="center"
+                sx={{ color: "#1C1E30", fontSize: "24px", fontWeight: "700" }}
+              >
+                Xin chào {name} <img src={wavinghand} width={30} />
+              </Box>
+              <Box sx={{ color: "#828282", fontSize: "14px" }}>
+                Chúc bạn một tuần học tập hiệu quả!
+              </Box>
             </Box>
-            <Box sx={{ color: "#828282", fontSize: "14px" }}>
-              Chúc bạn một tuần học tập hiệu quả!
-            </Box>
-            <Grid container spacing={2}>
-              <Grid size={8}>
+            <Grid container spacing={2} sx={{ marginTop: "10px" }}>
+              <Grid size={7}>
+                <Box
+                  sx={{
+                    color: "#1C1E30",
+                    fontSize: "24px",
+                    fontWeight: "700",
+                  }}
+                >
+                  Thời gian học
+                </Box>
                 <BarChart />
               </Grid>
-              <Grid size={4}></Grid>
+              <Grid size={5}>
+                <Box
+                  sx={{
+                    color: "#1C1E30",
+                    fontSize: "24px",
+                    fontWeight: "700",
+                  }}
+                >
+                  Hiệu suất
+                </Box>
+              </Grid>
             </Grid>
           </Grid>
           <Grid size={{ xs: 12, sm: 4 }}>
