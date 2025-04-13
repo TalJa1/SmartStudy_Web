@@ -1,17 +1,42 @@
-import { Box } from "@mui/material";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Box, Grid } from "@mui/material";
 import Sidebar from "../../components/Sidebar";
+import wavinghand from "../../assets/home/wavinghand.png";
+import { useState } from "react";
 
 const HomeView = () => {
-  return <Sidebar children={<HomeContent />} />;
-};
+  const [name, setName] = useState<string>("Nguyên");
+  const HomeContent = () => {
+    return (
+      <Box style={{ padding: "20px" }}>
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, sm: 8 }}>
+            <Box
+              display="flex"
+              alignItems="center"
+              sx={{ color: "#1C1E30", fontSize: "24px", fontWeight: "700" }}
+            >
+              Xin chào {name} <img src={wavinghand} width={30} />
+            </Box>
+            <Box sx={{ color: "#828282", fontSize: "14px" }}>
+              Chúc bạn một tuần học tập hiệu quả!
+            </Box>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 4 }}>
+            <Box
+              textAlign="left"
+              color="#000000"
+              sx={{ fontWeight: "700", fontSize: "24px" }}
+            >
+              Hồ sơ
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+    );
+  };
 
-const HomeContent = () => {
-  return (
-    <Box style={{ padding: "20px" }}>
-      <h1>Home Content</h1>
-      <p>This is the home content.</p>
-    </Box>
-  );
+  return <Sidebar children={<HomeContent />} />;
 };
 
 export default HomeView;

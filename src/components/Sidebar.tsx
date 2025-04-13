@@ -33,8 +33,8 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   });
 
   return (
-    <div style={{ display: "flex" }}>
-      <S style={{ height: "100vh" }}>
+    <Box sx={{ display: "flex", width: "100vw" }}>
+      <S style={{ height: "100vh", overflow: "hidden" }}>
         <Box sx={{ margin: "8px" }}>
           <img src={logo} width={130} />
           <Box sx={{ fontSize: "15px", textAlign: "center" }}>
@@ -108,8 +108,10 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           </MenuItem>
         </Menu>
       </S>
-      <div style={{ flex: 1, padding: "16px" }}>{children}</div>
-    </div>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        {children}
+      </div>
+    </Box>
   );
 };
 
