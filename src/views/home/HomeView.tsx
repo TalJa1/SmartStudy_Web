@@ -4,6 +4,7 @@ import Sidebar from "../../components/Sidebar";
 import wavinghand from "../../assets/home/wavinghand.png";
 import { useState } from "react";
 import BarChart from "../../components/BarChart";
+import progress from "../../assets/home/progress.png";
 
 const HomeView = () => {
   const [name, setName] = useState<string>("Nguyên");
@@ -46,6 +47,23 @@ const HomeView = () => {
                   }}
                 >
                   Hiệu suất
+                </Box>
+                <Box
+                  sx={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                  }}
+                >
+                  <img src={progress} width={140} />
+                  <Box display={"flex"} flexDirection={"row"} gap={1}>
+                    <Box sx={{ fontSize: "14px", color: "#4F4F4F" }}>
+                      Bài tập hoàn thành:
+                    </Box>
+                    <Box sx={{ fontSize: "14px", fontWeight: "700" }}>8/10</Box>
+                  </Box>
                 </Box>
               </Grid>
             </Grid>
