@@ -43,3 +43,78 @@ export const getLearningData = (): LearningData[] => {
     },
   ];
 };
+
+// --- Interfaces ---
+
+export type TodoStatus = 'Hoàn thành' | 'Quá hạn' | 'Đang làm';
+export type PriorityLevel = 'Cao' | 'TB' | 'Thấp'; // TB = Trung bình
+
+export interface TodoItemData {
+  id: string;
+  title: string;
+  subject: string;
+  dueDate: string; // Format: DD/MM/YYYY
+  priority: PriorityLevel;
+  status: TodoStatus;
+}
+
+export interface ScheduleItemData {
+  id: string;
+  title: string;
+  subject: string;
+  date: string; // Format: DD/MM/YYYY
+  time: string; // Format: HH:mm
+}
+
+// --- Mock Data ---
+
+export const mockTodoItems: TodoItemData[] = [
+  {
+    id: 'todo-1',
+    title: 'Giải đề Hóa 2024',
+    subject: 'Hóa',
+    dueDate: '24/04/2025',
+    priority: 'TB',
+    status: 'Hoàn thành',
+  },
+  {
+    id: 'todo-2',
+    title: 'Đọc sách tham khảo',
+    subject: 'Văn',
+    dueDate: '26/04/2025',
+    priority: 'Thấp',
+    status: 'Quá hạn',
+  },
+  {
+    id: 'todo-3',
+    title: 'Đề cương toán HK II',
+    subject: 'Toán',
+    dueDate: '28/04/2025',
+    priority: 'Cao',
+    status: 'Đang làm',
+  },
+];
+
+export const mockScheduleItems: ScheduleItemData[] = [
+  {
+    id: 'sch-1',
+    title: 'Chữa đề cương HKII',
+    subject: 'Văn',
+    date: '27/04/2025',
+    time: '15:00',
+  },
+  {
+    id: 'sch-2',
+    title: 'Học thêm',
+    subject: 'Toán',
+    date: '27/04/2025',
+    time: '19:00',
+  },
+    {
+    id: 'sch-3',
+    title: 'Ôn tập Lý thuyết',
+    subject: 'Lý',
+    date: '29/04/2025',
+    time: '09:30',
+  },
+];

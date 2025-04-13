@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import Sidebar from "../../components/Sidebar";
 import wavinghand from "../../assets/home/wavinghand.png";
 import { useState } from "react";
@@ -10,6 +10,7 @@ import PercentProgress from "../../components/home/PercentProgress";
 import EditSquareIcon from "@mui/icons-material/EditSquare";
 import avatar from "../../assets/home/avatar.png";
 import MiniCalendar from "../../components/home/MiniCalendar";
+import DardboardWidgets from "../../components/home/DardboardWidgets";
 
 const HomeView = () => {
   document.title = "Tổng quan";
@@ -204,8 +205,16 @@ const HomeView = () => {
                 {name}
               </Box>
               <Box>Học sinh lớp 11A1</Box>
-              <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 3,
+                }}
+              >
                 <MiniCalendar />
+                <DardboardWidgets />
               </Box>
             </Box>
           </Grid>
