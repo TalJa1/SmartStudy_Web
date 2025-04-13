@@ -1,18 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import Sidebar from "../../components/Sidebar";
 import wavinghand from "../../assets/home/wavinghand.png";
 import { useState } from "react";
 import BarChart from "../../components/BarChart";
 import progress from "../../assets/home/progress.png";
+import { getLearningData } from "../../services/home/learningService";
 import PercentProgress from "../../components/home/PercentProgress";
 
 const HomeView = () => {
   const [name, setName] = useState<string>("Nguyên");
+  const learningData = getLearningData();
+
   const HomeContent = () => {
     return (
       <Box style={{ padding: "20px" }}>
-        <Grid container spacing={2}>
+        {/* Chart group */}
+        <Grid container>
           <Grid size={{ xs: 12, sm: 8 }}>
             <Box sx={{ m: 2 }}>
               <Box
@@ -68,7 +72,88 @@ const HomeView = () => {
                 </Box>
               </Grid>
             </Grid>
+
+            {/* Data Group */}
+            <Grid sx={{ mt: 5, width: "100%" }} container>
+              <Box
+                sx={{
+                  color: "#1C1E30",
+                  fontSize: "20px",
+                  fontWeight: 600,
+                  width: "100%",
+                }}
+              >
+                Lộ trình mục tiêu
+              </Box>
+              <Grid container sx={{ mt: 2, width: "100%" }}>
+                <Grid container sx={{ width: "100%" }}>
+                  <Grid
+                    container
+                    sx={{
+                      fontWeight: "bold",
+                      color: "#1C1E30",
+                      textAlign: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <Grid size={2}>
+                      Môn
+                    </Grid>
+                    <Grid size={2}>
+                      Mục tiêu
+                    </Grid>
+                    <Grid size={2}>
+                      Tiến độ
+                    </Grid>
+                    <Grid size={2}>
+                      BĐ
+                    </Grid>
+                    <Grid size={2}>
+                      KT
+                    </Grid>
+                    <Grid size={2}>
+                      Phân loại
+                    </Grid>
+                  </Grid>
+                </Grid>
+                {learningData.map((item, index) => (
+                  <Grid key={index} sx={{ width: "100%", mt:2 }}>
+                    <Grid
+                      container
+                      sx={{
+                        color: "#4F4F4F",
+                        textAlign: "center",
+                      }}
+                    >
+                      <Grid size={2}>
+                        {item.subject}
+                      </Grid>
+                      <Grid size={2}>
+                        {item.goal}
+                      </Grid>
+                      <Grid size={2}>
+                        <PercentProgress progress={parseInt(item.progress)} />
+                      </Grid>
+                      <Grid size={2}>
+                        {item.startDate}
+                      </Grid>
+                      <Grid size={2}>
+                        {item.endDate}
+                      </Grid>
+                      <Grid size={2}>
+                        {item.category}
+                      </Grid>
+                    </Grid>
+                    <Box sx={{ mt: 1, color: "#828282", fontSize: "14px" }}>
+                      {item.description}
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
           </Grid>
+
+          {/* Left info */}
           <Grid size={{ xs: 12, sm: 4 }}>
             <Box
               textAlign="left"

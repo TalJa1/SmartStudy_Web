@@ -13,7 +13,7 @@ const PercentProgress: React.FC<PercentProgressProps> = ({ progress }) => {
   function CircularProgressWithLabel(
     props: CircularProgressProps & { value: number }
   ) {
-    const color = props.value >= 50 ? "green" : "#EF8D43";
+    const color = props.value > 50 ? "green" : "#EF8D43";
 
     return (
       <Box sx={{ position: "relative", display: "inline-flex" }}>
