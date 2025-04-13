@@ -12,7 +12,11 @@ import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import logo from "../assets/sidebar/logo.png";
 
-const Sidebar: React.FC = () => {
+interface SidebarProps {
+  children: React.ReactNode;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const [activeTab, setActiveTab] = useState("Tổng quan");
   const navigate = useNavigate();
 
@@ -29,80 +33,83 @@ const Sidebar: React.FC = () => {
   });
 
   return (
-    <S style={{ height: "100vh" }}>
-      <Box sx={{ margin: "8px" }}>
-        <img src={logo} width={130} />
-        <Box sx={{ fontSize: "15px", textAlign: "center" }}>
-          Smart Study Planner
+    <div style={{ display: "flex" }}>
+      <S style={{ height: "100vh" }}>
+        <Box sx={{ margin: "8px" }}>
+          <img src={logo} width={130} />
+          <Box sx={{ fontSize: "15px", textAlign: "center" }}>
+            Smart Study Planner
+          </Box>
         </Box>
-      </Box>
-      <Menu>
-        <MenuItem
-          icon={<HomeFilledIcon />}
-          active={activeTab === "Tổng quan"}
-          onClick={() => handleTabChange("Tổng quan", "/home")}
-          style={getMenuItemStyle(activeTab === "Tổng quan")}
-        >
-          Tổng quan
-        </MenuItem>
-        <MenuItem
-          icon={<CalendarMonthIcon />}
-          active={activeTab === "Lịch học"}
-          onClick={() => handleTabChange("Lịch học", "/schedule")}
-          style={getMenuItemStyle(activeTab === "Lịch học")}
-        >
-          Lịch học
-        </MenuItem>
-        <MenuItem
-          icon={<HomeWorkIcon />}
-          active={activeTab === "Bài tập"}
-          onClick={() => handleTabChange("Bài tập", "/assignments")}
-          style={getMenuItemStyle(activeTab === "Bài tập")}
-        >
-          Bài tập
-        </MenuItem>
-        <MenuItem
-          icon={<StarIcon />}
-          active={activeTab === "Mục tiêu"}
-          onClick={() => handleTabChange("Mục tiêu", "/goals")}
-          style={getMenuItemStyle(activeTab === "Mục tiêu")}
-        >
-          Mục tiêu
-        </MenuItem>
-        <MenuItem
-          icon={<SchoolIcon />}
-          active={activeTab === "Pomodoro"}
-          onClick={() => handleTabChange("Pomodoro", "/pomodoro")}
-          style={getMenuItemStyle(activeTab === "Pomodoro")}
-        >
-          Pomodoro
-        </MenuItem>
-        <MenuItem
-          icon={<AssessmentIcon />}
-          active={activeTab === "Hiệu suất học tập"}
-          onClick={() => handleTabChange("Hiệu suất học tập", "/performance")}
-          style={getMenuItemStyle(activeTab === "Hiệu suất học tập")}
-        >
-          Hiệu suất học tập
-        </MenuItem>
-        <MenuItem
-          icon={<NotificationsIcon />}
-          active={activeTab === "Thông báo"}
-          onClick={() => handleTabChange("Thông báo", "/notifications")}
-          style={getMenuItemStyle(activeTab === "Thông báo")}
-        >
-          Thông báo
-        </MenuItem>
-        <MenuItem
-          icon={<SettingsIcon />}
-          active={activeTab === "Cài đặt"}
-          onClick={() => handleTabChange("Cài đặt", "/settings")}
-          style={getMenuItemStyle(activeTab === "Cài đặt")}
-        >
-          Cài đặt
-        </MenuItem>
-      </Menu>
-    </S>
+        <Menu>
+          <MenuItem
+            icon={<HomeFilledIcon />}
+            active={activeTab === "Tổng quan"}
+            onClick={() => handleTabChange("Tổng quan", "/home")}
+            style={getMenuItemStyle(activeTab === "Tổng quan")}
+          >
+            Tổng quan
+          </MenuItem>
+          <MenuItem
+            icon={<CalendarMonthIcon />}
+            active={activeTab === "Lịch học"}
+            onClick={() => handleTabChange("Lịch học", "/schedule")}
+            style={getMenuItemStyle(activeTab === "Lịch học")}
+          >
+            Lịch học
+          </MenuItem>
+          <MenuItem
+            icon={<HomeWorkIcon />}
+            active={activeTab === "Bài tập"}
+            onClick={() => handleTabChange("Bài tập", "/assignments")}
+            style={getMenuItemStyle(activeTab === "Bài tập")}
+          >
+            Bài tập
+          </MenuItem>
+          <MenuItem
+            icon={<StarIcon />}
+            active={activeTab === "Mục tiêu"}
+            onClick={() => handleTabChange("Mục tiêu", "/goals")}
+            style={getMenuItemStyle(activeTab === "Mục tiêu")}
+          >
+            Mục tiêu
+          </MenuItem>
+          <MenuItem
+            icon={<SchoolIcon />}
+            active={activeTab === "Pomodoro"}
+            onClick={() => handleTabChange("Pomodoro", "/pomodoro")}
+            style={getMenuItemStyle(activeTab === "Pomodoro")}
+          >
+            Pomodoro
+          </MenuItem>
+          <MenuItem
+            icon={<AssessmentIcon />}
+            active={activeTab === "Hiệu suất học tập"}
+            onClick={() => handleTabChange("Hiệu suất học tập", "/performance")}
+            style={getMenuItemStyle(activeTab === "Hiệu suất học tập")}
+          >
+            Hiệu suất học tập
+          </MenuItem>
+          <MenuItem
+            icon={<NotificationsIcon />}
+            active={activeTab === "Thông báo"}
+            onClick={() => handleTabChange("Thông báo", "/notifications")}
+            style={getMenuItemStyle(activeTab === "Thông báo")}
+          >
+            Thông báo
+          </MenuItem>
+          <MenuItem
+            icon={<SettingsIcon />}
+            active={activeTab === "Cài đặt"}
+            onClick={() => handleTabChange("Cài đặt", "/settings")}
+            style={getMenuItemStyle(activeTab === "Cài đặt")}
+          >
+            Cài đặt
+          </MenuItem>
+        </Menu>
+      </S>
+      <div style={{ flex: 1, padding: "16px" }}>{children}</div>
+    </div>
   );
 };
 
