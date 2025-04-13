@@ -5,6 +5,7 @@ import wavinghand from "../../assets/home/wavinghand.png";
 import { useState } from "react";
 import BarChart from "../../components/BarChart";
 import progress from "../../assets/home/progress.png";
+import PercentProgress from "../../components/home/PercentProgress";
 
 const HomeView = () => {
   const [name, setName] = useState<string>("Nguyên");
