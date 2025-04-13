@@ -102,7 +102,7 @@ const LoginView = () => {
         container
         sx={{ borderRadius: 2, overflow: "hidden" }}
       >
-        <Grid size={{ xs: 12, md: 12 }} sx={{ mb: 5 }}>
+        <Grid size={{ xs: 12, md: 12 }} sx={{ mb: 5 , p:1}}>
           <Box>
             <Typography component="h1" variant="h4" sx={{ fontWeight: "bold" }}>
               SMART STUDY PLANNER
@@ -111,7 +111,7 @@ const LoginView = () => {
         </Grid>
 
         {/* Left side - Login Form */}
-        <Grid size={{ xs: 12, md: 7 }}>
+        <Grid size={{ xs: 12, md: 7 }} sx={{ p: 1 }}>
           <Box
             sx={{
               display: "flex",
