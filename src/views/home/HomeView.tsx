@@ -3,6 +3,7 @@ import { Box, Grid } from "@mui/material";
 import Sidebar from "../../components/Sidebar";
 import wavinghand from "../../assets/home/wavinghand.png";
 import { useState } from "react";
+import BarChart from "../../components/BarChart";
 
 const HomeView = () => {
   const [name, setName] = useState<string>("Nguyên");
@@ -21,6 +22,12 @@ const HomeView = () => {
             <Box sx={{ color: "#828282", fontSize: "14px" }}>
               Chúc bạn một tuần học tập hiệu quả!
             </Box>
+            <Grid container spacing={2}>
+              <Grid size={8}>
+                <BarChart />
+              </Grid>
+              <Grid size={4}></Grid>
+            </Grid>
           </Grid>
           <Grid size={{ xs: 12, sm: 4 }}>
             <Box
