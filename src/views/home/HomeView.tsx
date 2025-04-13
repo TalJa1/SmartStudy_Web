@@ -7,6 +7,8 @@ import BarChart from "../../components/BarChart";
 import progress from "../../assets/home/progress.png";
 import { getLearningData } from "../../services/home/learningService";
 import PercentProgress from "../../components/home/PercentProgress";
+import EditSquareIcon from "@mui/icons-material/EditSquare";
+import avatar from "../../assets/home/avatar.png";
 
 const HomeView = () => {
   document.title = "Tổng quan";
@@ -19,7 +21,7 @@ const HomeView = () => {
         {/* Chart group */}
         <Grid container>
           <Grid size={{ xs: 12, sm: 12, md: 8 }}>
-            <Box sx={{ m: 2 }}>
+            <Box sx={{ m: 1 }}>
               <Box
                 display="flex"
                 alignItems="center"
@@ -113,7 +115,10 @@ const HomeView = () => {
                         textAlign: "center",
                       }}
                     >
-                      <Grid size={2} sx={{ wordWrap: "break-word", fontWeight:700 }}>
+                      <Grid
+                        size={2}
+                        sx={{ wordWrap: "break-word", fontWeight: 700 }}
+                      >
                         {item.subject}
                       </Grid>
                       <Grid size={2} sx={{ wordWrap: "break-word" }}>
@@ -151,21 +156,55 @@ const HomeView = () => {
             </Grid>
           </Grid>
 
-            {/* Right info */}
-            <Grid
+          {/* Right info */}
+          <Grid
             size={{ xs: false, sm: false, md: 4 }}
             sx={{
               display: { xs: "none", sm: "none", md: "block" },
             }}
-            >
+          >
             <Box
-              textAlign="left"
-              color="#000000"
-              sx={{ fontWeight: "700", fontSize: "24px" }}
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "flex-end",
+                justifyContent: "space-between",
+              }}
             >
-              Hồ sơ
+              <Box
+                textAlign="left"
+                color="#000000"
+                sx={{ fontWeight: "700", fontSize: "24px" }}
+              >
+                Hồ sơ
+              </Box>
+              <EditSquareIcon
+                sx={{
+                  color: "#1C1E30",
+                  fontSize: "24px",
+                }}
+              />
             </Box>
-            </Grid>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <img src={avatar} width={140} />
+              <Box
+                sx={{
+                  color: "#000000",
+                  fontSize: "20px",
+                  fontWeight: 600,
+                }}
+              >
+                {name}
+              </Box>
+              <Box>Học sinh lớp 11A1</Box>
+            </Box>
+          </Grid>
         </Grid>
       </Box>
     );
