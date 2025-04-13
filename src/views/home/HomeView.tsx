@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import Sidebar from "../../components/Sidebar";
 import wavinghand from "../../assets/home/wavinghand.png";
 import { useState } from "react";
@@ -18,7 +18,7 @@ const HomeView = () => {
       <Box style={{ padding: "20px" }}>
         {/* Chart group */}
         <Grid container>
-          <Grid size={{ xs: 12, sm: 8 }}>
+          <Grid size={{ xs: 12, sm: 12, md: 8 }}>
             <Box sx={{ m: 2 }}>
               <Box
                 display="flex"
@@ -105,7 +105,7 @@ const HomeView = () => {
                   </Grid>
                 </Grid>
                 {learningData.map((item, index) => (
-                  <Grid key={index} sx={{ width: "100%", mt: 2 }}>
+                  <Grid key={index} sx={{ width: "100%", mt: 3 }}>
                     <Grid
                       container
                       sx={{
@@ -120,7 +120,7 @@ const HomeView = () => {
                         {item.goal}
                       </Grid>
                       <Grid size={2} sx={{ wordWrap: "break-word" }}>
-                        {item.progress}
+                        <PercentProgress progress={parseInt(item.progress)} />
                       </Grid>
                       <Grid size={2} sx={{ wordWrap: "break-word" }}>
                         {item.startDate}
@@ -151,8 +151,13 @@ const HomeView = () => {
             </Grid>
           </Grid>
 
-          {/* Left info */}
-          <Grid size={{ xs: 12, sm: 4 }}>
+            {/* Right info */}
+            <Grid
+            size={{ xs: false, sm: false, md: 4 }}
+            sx={{
+              display: { xs: "none", sm: "none", md: "block" },
+            }}
+            >
             <Box
               textAlign="left"
               color="#000000"
@@ -160,7 +165,7 @@ const HomeView = () => {
             >
               Hồ sơ
             </Box>
-          </Grid>
+            </Grid>
         </Grid>
       </Box>
     );
