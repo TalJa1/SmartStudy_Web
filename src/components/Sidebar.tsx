@@ -180,15 +180,13 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             {/* <Box sx={{ flexGrow: 1 }} />  */}
             {/* This spacer might need to be placed differently depending on layout */}
             <MenuItem
-                icon={<SettingsIcon />}
-                active={activeTab === "Cài đặt"}
-                onClick={() => handleTabChange("Cài đặt", "/settings")}
-              >
-                Cài đặt
-              </MenuItem>
+              icon={<SettingsIcon />}
+              active={activeTab === "Cài đặt"}
+              onClick={() => handleTabChange("Cài đặt", "/settings")}
+            >
+              Cài đặt
+            </MenuItem>
           </Menu>
-
-         
         </Box>
       </S>
 

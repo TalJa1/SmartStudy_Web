@@ -1,11 +1,18 @@
+import { Box } from "@mui/material";
 import Sidebar from "../../components/Sidebar";
+import HeaderSearchBar from "../../components/HeaderSearchBar";
 
 const ScheduleView = () => {
+  const loggedInUserName = "Phúc Nguyễn";
+
   const ScheduleContent = () => {
     return (
       <div className="schedule-content">
-        <h1>Schedule Content</h1>
-        {/* Add your schedule content here */}
+        <Box
+          sx={{ padding: 2, borderBottom: "1px solid", borderColor: "divider" }}
+        >
+          <HeaderSearchBar userName={loggedInUserName} />
+        </Box>
       </div>
     );
   };
