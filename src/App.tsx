@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import LoginView from "./views/login/LoginView";
-import HomeView from "./views/home/HomeView";
+import HomeView from "./views/tabs/HomeView";
 
 function App() {
   return (
