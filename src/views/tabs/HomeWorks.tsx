@@ -67,21 +67,19 @@ const HomeWorks = () => {
     };
 
     return (
-      <Box>
+      <Box sx={{ width: "100%", overflowX: "hidden" }}>
         <HeaderSearchBar userName={loggedInUserName} />
         <ControlBarMui />
         <Box>
           <TableContainer component={Paper}>
-            <Table sx={{ tableLayout: "fixed" }}>
+            <Table sx={{ tableLayout: "fixed", minWidth: 650 }}>
               <TableHead>
                 <TableRow>
                   <TableCell>Tiêu đề</TableCell>
                   <TableCell>Môn</TableCell>
                   <TableCell>Hạn</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>
-                    Mức ưu tiên
-                  </TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>Trạng thái</TableCell>
+                  <TableCell>Mức ưu tiên</TableCell>
+                  <TableCell>Trạng thái</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -90,12 +88,8 @@ const HomeWorks = () => {
                     <TableCell>{task.title}</TableCell>
                     <TableCell>{task.subject}</TableCell>
                     <TableCell>{formatDate(task.due_date)}</TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {getPriorityLabel(task.priority)}
-                    </TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
-                      {getStatusChip(task.status)}
-                    </TableCell>
+                    <TableCell>{getPriorityLabel(task.priority)}</TableCell>
+                    <TableCell>{getStatusChip(task.status)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

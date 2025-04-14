@@ -41,7 +41,6 @@ const HeaderSearchBar: React.FC<HeaderBarProps> = ({
         padding: theme.spacing(1, 2), // Vertical padding 1 unit, horizontal 2 units
         borderRadius: "12px", // Soft overall rounding if needed (often applied by parent)
         // backgroundColor: theme.palette.background.paper, // Use theme background
-        width: "100%", // Take full width of its container
       }}
     >
       {/* Search Input Section */}
@@ -53,7 +52,7 @@ const HeaderSearchBar: React.FC<HeaderBarProps> = ({
           borderRadius: "12px", // Rounded corners for search
           padding: theme.spacing(0.5, 1.5), // Padding inside the search box
           flexGrow: 1, // Allow search to take available space
-          maxWidth: "500px", // Optional: Limit max width of search
+          // maxWidth: "500px", // Optional: Limit max width of search
           mr: 2, // Margin to separate from right items
         }}
       >
