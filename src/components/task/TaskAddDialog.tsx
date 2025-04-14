@@ -6,7 +6,10 @@ import {
   Box,
   Typography,
   Button,
+  Chip,
 } from "@mui/material";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 import LeftCalendar from "./LeftCalendar";
 import { fetchTasksByDate } from "../../api/taskAPI"; // Assuming this service exists
 
@@ -99,16 +102,45 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                     sx={{
                       mb: 2,
                       p: 2,
-                      border: "1px solid #ddd",
+                      border: "1px solid #4caf50",
                       borderRadius: "8px",
                       bgcolor: "#f9f9f9",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
                     }}
                   >
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Box
+                        sx={{
+                          width: 10,
+                          height: 10,
+                          bgcolor: "#4caf50",
+                          borderRadius: "50%",
+                        }}
+                      ></Box>
+                      <Typography variant="body2" fontWeight="bold" color="#4caf50">
+                        Hoàn thành
+                      </Typography>
+                      <Chip
+                        label="Môn văn"
+                        size="small"
+                        sx={{ bgcolor: "#e8f5e9", color: "#4caf50", fontWeight: "bold" }}
+                      />
+                      <NotificationsIcon sx={{ color: "#4caf50", fontSize: 18 }} />
+                    </Box>
                     <Typography variant="subtitle1" fontWeight="bold">
                       {task.title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {task.description}
+                      Ghi chú: {task.description}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                    >
+                      <StarBorderIcon sx={{ fontSize: 16 }} /> Mức độ ưu tiên: Trung bình
                     </Typography>
                   </Box>
                 ))
