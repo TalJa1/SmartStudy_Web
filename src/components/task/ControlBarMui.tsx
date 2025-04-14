@@ -5,8 +5,8 @@ import {
   MenuItem,
   TextField,
   Chip,
+  Checkbox,
   FormControlLabel,
-  Radio,
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import AddIcon from "@mui/icons-material/Add";
@@ -14,13 +14,12 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import TaskAPI from "../../api/taskAPI";
 
 function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject: string; priority: string; status: string }) => void }) {
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(false); // Default to false to hide the filter row initially
   const [filters, setFilters] = useState({
     subject: "",
     priority: "",
     status: "",
   });
-  const [selectedValue, setSelectedValue] = useState("all");
   const [subjects, setSubjects] = useState<string[]>([]);
 
   useEffect(() => {
@@ -38,17 +37,18 @@ function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject
   }, []);
 
   const handleFilterClick = () => {
-    setShowFilters(!showFilters);
+    setShowFilters(!showFilters); // Toggle the visibility of the filter row
+    if (showFilters) {
+      // Reset filters when closing the filter row
+      setFilters({ subject: "", priority: "", status: "" });
+      onFilterChange({ subject: "", priority: "", status: "" });
+    }
   };
 
   const handleFilterChange = (key: string, value: string) => {
     const updatedFilters = { ...filters, [key]: value };
     setFilters(updatedFilters);
     onFilterChange(updatedFilters);
-  };
-
-  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedValue(event.target.value);
   };
 
   return (
@@ -119,24 +119,23 @@ function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject
             Lọc
           </Button>
 
-          <FormControlLabel
-            value="all"
-            control={
-              <Radio
-                checked={selectedValue === "all"}
-                onChange={handleRadioChange}
-                size="small"
-                sx={{
-                  color: "grey.600",
-                  "&.Mui-checked": {
-                    color: "#2c3e50",
-                  },
-                }}
-              />
-            }
-            label="Tất cả"
-            sx={{ ml: 1 }}
-          />
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={filters.subject === "" && filters.priority === "" && filters.status === ""}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setFilters({ subject: "", priority: "", status: "" });
+                      onFilterChange({ subject: "", priority: "", status: "" });
+                    }
+                  }}
+                />
+              }
+              label="Tất cả"
+              sx={{ minWidth: 150 }}
+            />
+          </Box>
         </Box>
       </Box>
 
