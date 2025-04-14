@@ -19,6 +19,12 @@ import { format } from "date-fns";
 
 const HomeWorks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [filters, setFilters] = useState({
+    subject: "",
+    priority: "",
+    status: "",
+  });
+
   const loggedInUserName = "Phúc Nguyễn";
 
   useEffect(() => {
@@ -34,17 +40,31 @@ const HomeWorks = () => {
     fetchTasks();
   }, []);
 
+  const handleFilterChange = (newFilters: { subject: string; priority: string; status: string }) => {
+    setFilters(newFilters);
+  };
+
+  const filteredTasks = tasks.filter((task) => {
+    const matchesSubject =
+      !filters.subject || task.subject === filters.subject;
+    const matchesPriority =
+      !filters.priority || task.priority.toString() === filters.priority;
+    const matchesStatus = !filters.status || task.status === filters.status;
+
+    return matchesSubject && matchesPriority && matchesStatus;
+  });
+
   const HomeWorksContent = () => {
     const getStatusChip = (status: string) => {
       switch (status) {
         case "Hoàn thành":
           return <Chip label="Hoàn thành" color="success" />;
-        case "Đang thực hiện":
-          return <Chip label="Đang thực hiện" color="info" />;
+        case "Đang làm":
+          return <Chip label="Đang làm" color="info" />;
         case "Quá hạn":
           return <Chip label="Quá hạn" color="error" />;
         default:
-          return <Chip label={status} color="warning"/>;
+          return <Chip label={status} color="warning" />;
       }
     };
 
@@ -69,7 +89,7 @@ const HomeWorks = () => {
     return (
       <Box sx={{ width: "100%", overflowX: "hidden" }}>
         <HeaderSearchBar userName={loggedInUserName} />
-        <ControlBarMui />
+        <ControlBarMui onFilterChange={handleFilterChange} />
         <Box>
           <TableContainer component={Paper}>
             <Table sx={{ tableLayout: "fixed", minWidth: 650 }}>
@@ -83,7 +103,7 @@ const HomeWorks = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {tasks.map((task) => (
+                {filteredTasks.map((task) => (
                   <TableRow key={task.user_id}>
                     <TableCell>{task.title}</TableCell>
                     <TableCell>{task.subject}</TableCell>
