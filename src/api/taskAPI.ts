@@ -1,4 +1,4 @@
-import { Task } from "../models/tabs/taskModel";
+import { TaskAdd } from "../models/tabs/taskModel";
 import apiClient from "../services/apiClient";
 
 const TaskAPI = {
@@ -12,7 +12,7 @@ const TaskAPI = {
     }
   },
 
-  createTask: async (taskData : Task) => {
+  createTask: async (taskData: TaskAdd) => {
     try {
       const response = await apiClient.post("/tasks", taskData);
       return response.data;
@@ -22,7 +22,7 @@ const TaskAPI = {
     }
   },
 
-  updateTask: async (taskId: number, taskData: Task) => {
+  updateTask: async (taskId: number, taskData: TaskAdd) => {
     try {
       const response = await apiClient.put(`/tasks/${taskId}`, taskData);
       return response.data;

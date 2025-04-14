@@ -10,3 +10,13 @@ export interface Task {
   priority: number;
   created_at: string; // ISO 8601 format
 }
+
+export interface TaskAdd {
+  goal_id: number;
+  user_id: number;
+  title: string;
+  subject: string;
+  due_date: string; // ISO 8601 format
+  priority: number;
+  status: string;
+}
