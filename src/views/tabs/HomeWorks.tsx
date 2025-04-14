@@ -3,9 +3,12 @@ import Sidebar from "../../components/Sidebar";
 import { useEffect, useState } from "react";
 import TaskAPI from "../../api/taskAPI";
 import { Task } from "../../models/tabs/taskModel";
+import ControlBarMui from "../../components/task/ControlBarMui";
+import HeaderSearchBar from "../../components/HeaderSearchBar";
 
 const HomeWorks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const loggedInUserName = "Phúc Nguyễn";
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -23,9 +26,8 @@ const HomeWorks = () => {
   const HomeWorksContent = () => {
     return (
       <Box>
-        {tasks.map((task) => (
-          <Box key={task.task_id}>{task.title}</Box>
-        ))}
+        <HeaderSearchBar userName={loggedInUserName} />
+        <ControlBarMui />
       </Box>
     );
   };
