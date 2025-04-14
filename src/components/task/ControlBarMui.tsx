@@ -12,6 +12,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import AddIcon from "@mui/icons-material/Add";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import TaskAPI from "../../api/taskAPI";
+import TaskAddDialog from "./TaskAddDialog";
 
 function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject: string; priority: string; status: string }) => void }) {
   const [showFilters, setShowFilters] = useState(false); // Default to false to hide the filter row initially
@@ -22,6 +23,7 @@ function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject
   });
   const [subjects, setSubjects] = useState<string[]>([]);
   const [isAllChecked, setIsAllChecked] = useState(false); // New state to manage checkbox
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchSubjects = async () => {
@@ -58,6 +60,14 @@ function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject
       setFilters({ subject: "", priority: "", status: "" });
       onFilterChange({ subject: "", priority: "", status: "" });
     }
+  };
+
+  const handleDialogOpen = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
   };
 
   return (
@@ -100,7 +110,7 @@ function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => console.log("Add button clicked")}
+            onClick={handleDialogOpen}
             sx={{
               bgcolor: "#2c3e50",
               color: "#fff",
@@ -186,6 +196,8 @@ function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject
           </Box>
         </Box>
       )}
+
+      <TaskAddDialog open={isDialogOpen} onClose={handleDialogClose} />
     </Box>
   );
 }
