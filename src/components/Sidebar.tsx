@@ -141,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             <MenuItem
               icon={<HomeWorkIcon />}
               active={activeTab === "Bài tập"}
-              onClick={() => handleTabChange("Bài tập", "/assignments")}
+              onClick={() => handleTabChange("Bài tập", "/homeworks")}
             >
               Bài tập
             </MenuItem>
