@@ -43,4 +43,15 @@ const TaskAPI = {
   },
 };
 
+export const fetchTasksByDate = async (date: Date) => {
+  try {
+    const formattedDate = date.toISOString().split("T")[0]; // Format date as YYYY-MM-DD
+    const response = await apiClient.get(`/tasks/due_date/${formattedDate}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching tasks by date:", error);
+    throw error;
+  }
+};
+
 export default TaskAPI;

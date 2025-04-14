@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,6 +8,13 @@ import {
   Button,
 } from "@mui/material";
 import LeftCalendar from "./LeftCalendar";
+import { fetchTasksByDate } from "../../api/taskAPI"; // Assuming this service exists
+
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+}
 
 interface TaskAddDialogProps {
   open: boolean;
@@ -16,10 +23,24 @@ interface TaskAddDialogProps {
 
 const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [tasks, setTasks] = useState<Task[]>([]);
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
   };
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const tasksData = await fetchTasksByDate(selectedDate);
+        setTasks(tasksData);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchTasks();
+  }, [selectedDate]);
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -68,14 +89,34 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
             </Box>
           </Box>
 
-          {/* Right Side: Content and Add Button */}
+          {/* Right Side: Task List and Add Button */}
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <Box sx={{ flex: 1, pl: 2 }}>
-              <Typography variant="body1" fontWeight="medium">
-                {`Ngày ${selectedDate.getDate()} tháng ${
-                  selectedDate.getMonth() + 1
-                } năm ${selectedDate.getFullYear()}`}
-              </Typography>
+            <Box sx={{ flex: 1, pl: 2, overflowY: "auto" }}>
+              {tasks.length > 0 ? (
+                tasks.map((task) => (
+                  <Box
+                    key={task.id}
+                    sx={{
+                      mb: 2,
+                      p: 2,
+                      border: "1px solid #ddd",
+                      borderRadius: "8px",
+                      bgcolor: "#f9f9f9",
+                    }}
+                  >
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      {task.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {task.description}
+                    </Typography>
+                  </Box>
+                ))
+              ) : (
+                <Typography variant="body1" color="text.secondary">
+                  Không có bài tập nào cho ngày này.
+                </Typography>
+              )}
             </Box>
             <Box
               sx={{
