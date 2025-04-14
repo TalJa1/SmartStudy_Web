@@ -21,6 +21,7 @@ function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject
     status: "",
   });
   const [subjects, setSubjects] = useState<string[]>([]);
+  const [isAllChecked, setIsAllChecked] = useState(false); // New state to manage checkbox
 
   useEffect(() => {
     const fetchSubjects = async () => {
@@ -49,6 +50,14 @@ function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject
     const updatedFilters = { ...filters, [key]: value };
     setFilters(updatedFilters);
     onFilterChange(updatedFilters);
+  };
+
+  const handleAllCheckChange = (checked: boolean) => {
+    setIsAllChecked(checked);
+    if (checked) {
+      setFilters({ subject: "", priority: "", status: "" });
+      onFilterChange({ subject: "", priority: "", status: "" });
+    }
   };
 
   return (
@@ -123,13 +132,8 @@ function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={filters.subject === "" && filters.priority === "" && filters.status === ""}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setFilters({ subject: "", priority: "", status: "" });
-                      onFilterChange({ subject: "", priority: "", status: "" });
-                    }
-                  }}
+                  checked={isAllChecked}
+                  onChange={(e) => handleAllCheckChange(e.target.checked)}
                 />
               }
               label="Tất cả"
