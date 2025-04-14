@@ -39,12 +39,12 @@ const HomeWorks = () => {
       switch (status) {
         case "Hoàn thành":
           return <Chip label="Hoàn thành" color="success" />;
-        case "Đang làm":
-          return <Chip label="Đang làm" color="warning" />;
+        case "Đang thực hiện":
+          return <Chip label="Đang thực hiện" color="info" />;
         case "Quá hạn":
           return <Chip label="Quá hạn" color="error" />;
         default:
-          return <Chip label={status} />;
+          return <Chip label={status} color="warning"/>;
       }
     };
 
