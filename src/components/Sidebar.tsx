@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Import useEffect
 import { Sidebar as S, Menu, MenuItem } from "react-pro-sidebar";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined"; // Icon for toggle
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -19,8 +19,16 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const theme = useTheme(); // Access MUI theme for styling if needed
-  const [activeTab, setActiveTab] = useState("Tổng quan");
+  const [activeTab, setActiveTab] = useState(() => {
+    // Retrieve active tab from localStorage or default to "Tổng quan"
+    return localStorage.getItem("activeTab") || "Tổng quan";
+  });
   const navigate = useNavigate();
+
+  // Save activeTab to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("activeTab", activeTab);
+  }, [activeTab]);
 
   // --- State for collapsed status ---
   // Start collapsed by default, or false if you want it expanded on large screens initially
