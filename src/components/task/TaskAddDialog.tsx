@@ -366,6 +366,19 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                         display: "flex",
                         flexDirection: "column",
                         gap: 1,
+                        cursor: "pointer", // Add pointer cursor to indicate clickability
+                      }}
+                      onClick={() => {
+                        setIsAddingTask(true); // Switch to editing view
+                        setNewTaskData({
+                          user_id: task.user_id,
+                          title: task.title,
+                          subject: task.subject,
+                          due_date: task.due_date,
+                          priority: task.priority,
+                          status: task.status,
+                          description: task.description,
+                        });
                       }}
                     >
                       <Box
