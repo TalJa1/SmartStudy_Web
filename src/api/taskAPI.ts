@@ -14,6 +14,7 @@ const TaskAPI = {
 
   createTask: async (taskData: TaskAdd) => {
     try {
+      console.log("Creating task with data:", taskData); // Log the task data being sent
       const response = await apiClient.post("/tasks", taskData);
       return response.data;
     } catch (error) {

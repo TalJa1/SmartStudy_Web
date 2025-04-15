@@ -17,23 +17,13 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import LeftCalendar from "./LeftCalendar";
 import { fetchTasksByDate } from "../../api/taskAPI"; // Assuming this is a named export
 import TaskAPI from "../../api/taskAPI"; // Assuming this is a named export
+import { TaskAdd } from "../../models/tabs/taskModel";
 
 interface Task {
   id: number;
   title: string;
   description: string;
   status: string; // Added status property
-}
-
-interface TaskAdd {
-  goal_id: number;
-  user_id: number;
-  title: string;
-  subject: string;
-  due_date: string;
-  priority: number;
-  status: string;
-  description: string; // Added description property
 }
 
 interface TaskAddDialogProps {
@@ -48,7 +38,6 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [notificationDays, setNotificationDays] = useState(1);
   const [newTaskData, setNewTaskData] = useState<TaskAdd>({
-    goal_id: 0, // Replace with actual goal_id
     user_id: 4, // Replace with actual user_id
     title: "",
     subject: "Toán",
@@ -57,8 +46,6 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
     status: "Đang làm", // Default status
     description: "", // Default description
   });
-
-  console.log("New Task Data:", newTaskData); // Debugging line
 
   const dialogProps: DialogProps = {
     disablePortal: true, // Prevents creating a new portal for the dialog
