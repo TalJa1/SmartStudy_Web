@@ -6,6 +6,7 @@ import {
   Typography,
   Button,
   Chip,
+  DialogProps,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -26,7 +27,13 @@ interface TaskAddDialogProps {
 const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
-  console.log("Selected date:", selectedDate);
+
+  const dialogProps: DialogProps = {
+    disablePortal: true, // Prevents creating a new portal for the dialog
+    disableEnforceFocus: true, // Avoids enforcing focus on the dialog
+    disableScrollLock: true,
+    open: false
+  };
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
@@ -46,7 +53,7 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   }, [selectedDate]);
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog {...dialogProps} open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogContent sx={{ height: "60vh" }}>
         <Box
           sx={{
@@ -96,7 +103,7 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
               {tasks.length > 0 ? (
                 tasks.map((task) => (
                   <Box
-                    key={task.id}
+                    key={`task-${task.id}${task.title}`}
                     sx={{
                       mb: 2,
                       p: 2,
