@@ -33,7 +33,7 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isAddingTask, setIsAddingTask] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedSubject, setSelectedSubject] = useState("Toán");
   const [notificationDays, setNotificationDays] = useState(1);
 
   const dialogProps: DialogProps = {
@@ -73,6 +73,10 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
 
     fetchTasks();
   }, [selectedDate]);
+
+  useEffect(() => {
+    setIsAddingTask(false);
+  }, [selectedDate, open]);
 
   return (
     <Dialog
@@ -222,9 +226,6 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                       Thông báo trước hạn nộp
                     </Typography>
                     <FormControl>
-                      {/* <InputLabel id="notification-select-label">
-                        Thông báo
-                      </InputLabel> */}
                       <Select
                         labelId="notification-select-label"
                         id="notification-select"
