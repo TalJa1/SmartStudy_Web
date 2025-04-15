@@ -17,6 +17,7 @@ interface Task {
   id: number;
   title: string;
   description: string;
+  status: string; // Added status property
 }
 
 interface TaskAddDialogProps {
@@ -32,7 +33,7 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
     disablePortal: true, // Prevents creating a new portal for the dialog
     disableEnforceFocus: true, // Avoids enforcing focus on the dialog
     disableScrollLock: true,
-    open: false
+    open: false,
   };
 
   const handleDateChange = (date: Date) => {
@@ -59,7 +60,13 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   }, [selectedDate]);
 
   return (
-    <Dialog {...dialogProps} open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog
+      {...dialogProps}
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
+      fullWidth
+    >
       <DialogContent sx={{ height: "60vh" }}>
         <Box
           sx={{
@@ -105,76 +112,96 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
 
           {/* Right Side: Task List and Add Button */}
           <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Typography
+              variant="h6"
+              color="text.secondary"
+              sx={{ color: "#D55455", textAlign: "center", mb: 2 }}
+            >
+              Ngày {selectedDate.getDate()} tháng {selectedDate.getMonth() + 1}{" "}
+              năm {selectedDate.getFullYear()}
+            </Typography>
             <Box sx={{ flex: 1, pl: 2, overflowY: "auto" }}>
               {tasks.length > 0 ? (
-                tasks.map((task) => (
-                  <Box
-                    key={`task-${task.id}${task.title}`}
-                    sx={{
-                      mb: 2,
-                      p: 2,
-                      border: "1px solid #4caf50",
-                      borderRadius: "8px",
-                      bgcolor: "#f9f9f9",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 1,
-                    }}
-                  >
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                tasks.map((task) => {
+                  let borderColor = "#4caf50"; // Default: Hoàn thành
+                  let priority = "Trung bình"; // Default priority
+
+                  if (task.status === "Đang làm") {
+                    borderColor = "#ff9800"; // Orange for "Đang làm"
+                    priority = "Cao";
+                  } else if (task.status === "Quá hạn") {
+                    borderColor = "#f44336"; // Red for "Quá hạn"
+                    priority = "Rất cao";
+                  }
+
+                  return (
+                    <Box
+                      key={`task-${task.id}${task.title}`}
+                      sx={{
+                        mb: 2,
+                        p: 2,
+                        border: `1px solid ${borderColor}`,
+                        borderRadius: "8px",
+                        bgcolor: "#f9f9f9",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                      }}
+                    >
                       <Box
-                        sx={{
-                          width: 10,
-                          height: 10,
-                          bgcolor: "#4caf50",
-                          borderRadius: "50%",
-                        }}
-                      ></Box>
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
+                        <Box
+                          sx={{
+                            width: 10,
+                            height: 10,
+                            bgcolor: borderColor,
+                            borderRadius: "50%",
+                          }}
+                        ></Box>
+                        <Typography
+                          variant="body2"
+                          fontWeight="bold"
+                          color={borderColor}
+                        >
+                          {task.status}
+                        </Typography>
+                        <Chip
+                          label="Môn văn"
+                          size="small"
+                          sx={{
+                            bgcolor: "#e8f5e9",
+                            color: borderColor,
+                            fontWeight: "bold",
+                          }}
+                        />
+                        <NotificationsIcon
+                          sx={{ color: borderColor, fontSize: 18 }}
+                        />
+                      </Box>
+                      <Typography variant="subtitle1" fontWeight="bold">
+                        {task.title}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Ghi chú: {task.description}
+                      </Typography>
                       <Typography
                         variant="body2"
-                        fontWeight="bold"
-                        color="#4caf50"
-                      >
-                        Hoàn thành
-                      </Typography>
-                      <Chip
-                        label="Môn văn"
-                        size="small"
+                        color="text.secondary"
                         sx={{
-                          bgcolor: "#e8f5e9",
-                          color: "#4caf50",
-                          fontWeight: "bold",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 0.5,
                         }}
-                      />
-                      <NotificationsIcon
-                        sx={{ color: "#4caf50", fontSize: 18 }}
-                      />
+                      >
+                        <StarBorderIcon sx={{ fontSize: 16 }} /> Mức độ ưu tiên:{" "}
+                        {priority}
+                      </Typography>
                     </Box>
-                    <Typography variant="subtitle1" fontWeight="bold">
-                      {task.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Ghi chú: {task.description}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
-                    >
-                      <StarBorderIcon sx={{ fontSize: 16 }} /> Mức độ ưu tiên:
-                      Trung bình
-                    </Typography>
-                  </Box>
-                ))
+                  );
+                })
               ) : (
-                <Typography
-                  variant="h6"
-                  color="text.secondary"
-                  sx={{ color: "#D55455", textAlign: "center" }}
-                >
-                  Ngày {selectedDate.getDate()} tháng{" "}
-                  {selectedDate.getMonth() + 1} năm {selectedDate.getFullYear()}
-                </Typography>
+                <></>
               )}
             </Box>
             <Box
