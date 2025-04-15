@@ -7,6 +7,10 @@ import {
   Button,
   Chip,
   DialogProps,
+  Switch,
+  FormControl,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -29,6 +33,8 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isAddingTask, setIsAddingTask] = useState(false);
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [notificationDays, setNotificationDays] = useState(1);
 
   const dialogProps: DialogProps = {
     disablePortal: true, // Prevents creating a new portal for the dialog
@@ -131,7 +137,14 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
             </Typography>
             <Box sx={{ flex: 1, pl: 2 }}>
               {isAddingTask ? (
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 2,
+                    width: "100%",
+                  }}
+                >
                   <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                     <img
                       src="/src/assets/home/avatar.png"
@@ -161,22 +174,72 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                       <Typography variant="body2" fontWeight="bold">
                         Chọn môn
                       </Typography>
-                      <Button variant="outlined">Môn</Button>
+                      <FormControl fullWidth>
+                        <Select
+                          labelId="subject-select-label"
+                          id="subject-select"
+                          value={selectedSubject}
+                          onChange={(e) => setSelectedSubject(e.target.value)}
+                        >
+                          <MenuItem value="Toán">Toán</MenuItem>
+                          <MenuItem value="Văn">Văn</MenuItem>
+                          <MenuItem value="Tiếng Anh">Tiếng Anh</MenuItem>
+                          <MenuItem value="Lịch Sử">Lịch Sử</MenuItem>
+                          <MenuItem value="Địa Lý">Địa Lý</MenuItem>
+                          <MenuItem value="Vật Lý">Vật Lý</MenuItem>
+                          <MenuItem value="Hóa Học">Hóa Học</MenuItem>
+                          <MenuItem value="Sinh Học">Sinh Học</MenuItem>
+                          <MenuItem value="Công Nghệ">Công Nghệ</MenuItem>
+                          <MenuItem value="Giáo Dục Công Dân">
+                            Giáo Dục Công Dân
+                          </MenuItem>
+                        </Select>
+                      </FormControl>
                     </Box>
                   </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <Typography variant="body2" fontWeight="bold">
                       Nhắc nhở
                     </Typography>
-                    <Button variant="outlined">Tắt</Button>
+                    <Switch defaultChecked />
                   </Box>
                   <Box
-                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      justifyContent: "space-between",
+                    }}
                   >
                     <Typography variant="body2" fontWeight="bold">
                       Thông báo trước hạn nộp
                     </Typography>
-                    <Button variant="outlined">Ngày</Button>
+                    <FormControl>
+                      {/* <InputLabel id="notification-select-label">
+                        Thông báo
+                      </InputLabel> */}
+                      <Select
+                        labelId="notification-select-label"
+                        id="notification-select"
+                        value={notificationDays}
+                        onChange={(e) =>
+                          setNotificationDays(Number(e.target.value))
+                        }
+                      >
+                        <MenuItem value={1}>1 ngày</MenuItem>
+                        <MenuItem value={2}>2 ngày</MenuItem>
+                        <MenuItem value={5}>5 ngày</MenuItem>
+                        <MenuItem value={10}>10 ngày</MenuItem>
+                        <MenuItem value={15}>15 ngày</MenuItem>
+                      </Select>
+                    </FormControl>
                   </Box>
                   <Box
                     sx={{ display: "flex", flexDirection: "column", gap: 1 }}
