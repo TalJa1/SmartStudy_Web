@@ -15,7 +15,8 @@ import {
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import LeftCalendar from "./LeftCalendar";
-import { fetchTasksByDate } from "../../api/taskAPI"; // Assuming this service exists
+import { fetchTasksByDate } from "../../api/taskAPI"; // Assuming this is a named export
+import TaskAPI from "../../api/taskAPI"; // Assuming this is a named export
 
 interface Task {
   id: number;
@@ -24,18 +25,40 @@ interface Task {
   status: string; // Added status property
 }
 
+interface TaskAdd {
+  goal_id: number;
+  user_id: number;
+  title: string;
+  subject: string;
+  due_date: string;
+  priority: number;
+  status: string;
+  description: string; // Added description property
+}
+
 interface TaskAddDialogProps {
   open: boolean;
   onClose: () => void;
 }
 
 const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
+  const [swt, setSwt] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isAddingTask, setIsAddingTask] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState("Toán");
   const [notificationDays, setNotificationDays] = useState(1);
-  const [selectedPriority, setSelectedPriority] = useState<string | null>(null);
+  const [newTaskData, setNewTaskData] = useState<TaskAdd>({
+    goal_id: 0, // Replace with actual goal_id
+    user_id: 4, // Replace with actual user_id
+    title: "",
+    subject: "Toán",
+    due_date: selectedDate.toISOString().split('T')[0], // Correctly format the date without time zone offset
+    priority: 1, // Default priority
+    status: "Đang làm", // Default status
+    description: "", // Default description
+  });
+
+  console.log("New Task Data:", newTaskData); // Debugging line
 
   const dialogProps: DialogProps = {
     disablePortal: true, // Prevents creating a new portal for the dialog
@@ -52,12 +75,14 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
     setIsAddingTask(true);
   };
 
-  const handleSaveTask = () => {
-    setIsAddingTask(false);
-  };
-
-  const handlePriorityChange = (priority: string) => {
-    setSelectedPriority(priority);
+  const handleSaveTask = async () => {
+    try {
+      await TaskAPI.createTask(newTaskData); // Assuming createTask is an API function
+      setIsAddingTask(false);
+      // Optionally, refresh tasks or show a success message
+    } catch (error) {
+      console.error("Error creating task:", error);
+    }
   };
 
   useEffect(() => {
@@ -71,6 +96,10 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
       try {
         const tasksData = await fetchTasksByDate(selectedDate);
         setTasks(tasksData);
+        setNewTaskData((prevData) => ({
+          ...prevData,
+          due_date: selectedDate.toLocaleDateString('en-CA'), // Correctly format the date without timezone offset
+        }));
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
@@ -160,9 +189,23 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                       alt="Avatar"
                       style={{ width: 50, height: 50, borderRadius: "50%" }}
                     />
-                    <Typography variant="h6" fontWeight="bold">
-                      Nhập tiêu đề bài tập
-                    </Typography>
+                    <input
+                      type="text"
+                      placeholder="Nhập tiêu đề bài tập"
+                      value={newTaskData.title}
+                      onChange={(e) =>
+                        setNewTaskData({
+                          ...newTaskData,
+                          title: e.target.value,
+                        })
+                      }
+                      style={{
+                        flex: 1,
+                        padding: "8px",
+                        borderRadius: "4px",
+                        border: "1px solid #ccc",
+                      }}
+                    />
                   </Box>
                   <Box sx={{ display: "flex", gap: 2 }}>
                     <Box
@@ -175,30 +218,39 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                         <Button
                           variant="outlined"
                           sx={{
-                            bgcolor: selectedPriority === "Cao" ? "#1C1E30" : "",
-                            color: selectedPriority === "Cao" ? "#fff" : "",
+                            bgcolor:
+                              newTaskData.priority === 3 ? "#1C1E30" : "",
+                            color: newTaskData.priority === 3 ? "#fff" : "",
                           }}
-                          onClick={() => handlePriorityChange("Cao")}
+                          onClick={() =>
+                            setNewTaskData({ ...newTaskData, priority: 3 })
+                          }
                         >
                           Cao
                         </Button>
                         <Button
                           variant="outlined"
                           sx={{
-                            bgcolor: selectedPriority === "Trung bình" ? "#1C1E30" : "",
-                            color: selectedPriority === "Trung bình" ? "#fff" : "",
+                            bgcolor:
+                              newTaskData.priority === 2 ? "#1C1E30" : "",
+                            color: newTaskData.priority === 2 ? "#fff" : "",
                           }}
-                          onClick={() => handlePriorityChange("Trung bình")}
+                          onClick={() =>
+                            setNewTaskData({ ...newTaskData, priority: 2 })
+                          }
                         >
                           Trung bình
                         </Button>
                         <Button
                           variant="outlined"
                           sx={{
-                            bgcolor: selectedPriority === "Thấp" ? "#1C1E30" : "",
-                            color: selectedPriority === "Thấp" ? "#fff" : "",
+                            bgcolor:
+                              newTaskData.priority === 1 ? "#1C1E30" : "",
+                            color: newTaskData.priority === 1 ? "#fff" : "",
                           }}
-                          onClick={() => handlePriorityChange("Thấp")}
+                          onClick={() =>
+                            setNewTaskData({ ...newTaskData, priority: 1 })
+                          }
                         >
                           Thấp
                         </Button>
@@ -214,8 +266,13 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                         <Select
                           labelId="subject-select-label"
                           id="subject-select"
-                          value={selectedSubject}
-                          onChange={(e) => setSelectedSubject(e.target.value)}
+                          value={newTaskData.subject}
+                          onChange={(e) =>
+                            setNewTaskData({
+                              ...newTaskData,
+                              subject: e.target.value,
+                            })
+                          }
                         >
                           <MenuItem value="Toán">Toán</MenuItem>
                           <MenuItem value="Văn">Văn</MenuItem>
@@ -244,7 +301,12 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                     <Typography variant="body2" fontWeight="bold">
                       Nhắc nhở
                     </Typography>
-                    <Switch defaultChecked />
+                    <Switch
+                      checked={swt}
+                      onChange={() => {
+                        setSwt(!swt);
+                      }}
+                    />
                   </Box>
                   <Box
                     sx={{
@@ -289,6 +351,13 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                         color: "black",
                       }}
                       placeholder="Ghi chú"
+                      value={newTaskData.description}
+                      onChange={(e) =>
+                        setNewTaskData({
+                          ...newTaskData,
+                          description: e.target.value,
+                        })
+                      }
                     ></textarea>
                   </Box>
                 </Box>
