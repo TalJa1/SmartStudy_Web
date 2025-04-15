@@ -35,6 +35,7 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   const [isAddingTask, setIsAddingTask] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState("Toán");
   const [notificationDays, setNotificationDays] = useState(1);
+  const [selectedPriority, setSelectedPriority] = useState<string | null>(null);
 
   const dialogProps: DialogProps = {
     disablePortal: true, // Prevents creating a new portal for the dialog
@@ -53,6 +54,10 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
 
   const handleSaveTask = () => {
     setIsAddingTask(false);
+  };
+
+  const handlePriorityChange = (priority: string) => {
+    setSelectedPriority(priority);
   };
 
   useEffect(() => {
@@ -167,9 +172,36 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                         Mức độ ưu tiên
                       </Typography>
                       <Box sx={{ display: "flex", gap: 1 }}>
-                        <Button variant="outlined">Cao</Button>
-                        <Button variant="outlined">Trung bình</Button>
-                        <Button variant="outlined">Thấp</Button>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            bgcolor: selectedPriority === "Cao" ? "#1C1E30" : "",
+                            color: selectedPriority === "Cao" ? "#fff" : "",
+                          }}
+                          onClick={() => handlePriorityChange("Cao")}
+                        >
+                          Cao
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            bgcolor: selectedPriority === "Trung bình" ? "#1C1E30" : "",
+                            color: selectedPriority === "Trung bình" ? "#fff" : "",
+                          }}
+                          onClick={() => handlePriorityChange("Trung bình")}
+                        >
+                          Trung bình
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            bgcolor: selectedPriority === "Thấp" ? "#1C1E30" : "",
+                            color: selectedPriority === "Thấp" ? "#fff" : "",
+                          }}
+                          onClick={() => handlePriorityChange("Thấp")}
+                        >
+                          Thấp
+                        </Button>
                       </Box>
                     </Box>
                     <Box
