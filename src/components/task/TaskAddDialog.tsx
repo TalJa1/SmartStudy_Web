@@ -26,9 +26,11 @@ interface TaskAddDialogProps {
 
 const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   const [swt, setSwt] = useState(false);
+  const [clickedBox, setClickedBox] = useState(0)
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isAddingTask, setIsAddingTask] = useState(false);
+  const [isUpdateMode, setIsUpdateMode] = useState(false); // New state to track if the mode is update or post
   const [notificationDays, setNotificationDays] = useState(1);
   const [newTaskData, setNewTaskData] = useState<TaskAdd>({
     user_id: 4, // Replace with actual user_id
@@ -53,15 +55,37 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
 
   const handleAddTask = () => {
     setIsAddingTask(true);
+    setIsUpdateMode(false); // Set to post mode when clicking the add button
+  };
+
+  const handleTaskClick = (task: Task) => {
+    setClickedBox(task.task_id)
+    setIsAddingTask(true);
+    setIsUpdateMode(true); // Set to update mode when clicking on a task box
+    setNewTaskData({
+      user_id: task.user_id,
+      title: task.title,
+      subject: task.subject,
+      due_date: task.due_date,
+      priority: task.priority,
+      status: task.status,
+      description: task.description,
+    });
   };
 
   const handleSaveTask = async () => {
     try {
-      await TaskAPI.createTask(newTaskData); // Assuming createTask is an API function
+      if (isUpdateMode) {
+        // If in update mode, call the update API
+        await TaskAPI.updateTask(clickedBox, newTaskData); // Assuming updateTask is an API function
+      } else {
+        // Otherwise, call the create API
+        await TaskAPI.createTask(newTaskData); // Assuming createTask is an API function
+      }
       setIsAddingTask(false);
       // Optionally, refresh tasks or show a success message
     } catch (error) {
-      console.error("Error creating task:", error);
+      console.error("Error saving task:", error);
     }
   };
 
@@ -368,18 +392,7 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                         gap: 1,
                         cursor: "pointer", // Add pointer cursor to indicate clickability
                       }}
-                      onClick={() => {
-                        setIsAddingTask(true); // Switch to editing view
-                        setNewTaskData({
-                          user_id: task.user_id,
-                          title: task.title,
-                          subject: task.subject,
-                          due_date: task.due_date,
-                          priority: task.priority,
-                          status: task.status,
-                          description: task.description,
-                        });
-                      }}
+                      onClick={() => handleTaskClick(task)}
                     >
                       <Box
                         sx={{ display: "flex", alignItems: "center", gap: 1 }}
