@@ -28,6 +28,7 @@ interface TaskAddDialogProps {
 const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [isAddingTask, setIsAddingTask] = useState(false);
 
   const dialogProps: DialogProps = {
     disablePortal: true, // Prevents creating a new portal for the dialog
@@ -38,6 +39,14 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);
+  };
+
+  const handleAddTask = () => {
+    setIsAddingTask(true);
+  };
+
+  const handleSaveTask = () => {
+    setIsAddingTask(false);
   };
 
   useEffect(() => {
@@ -120,8 +129,74 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
               Ngày {selectedDate.getDate()} tháng {selectedDate.getMonth() + 1}{" "}
               năm {selectedDate.getFullYear()}
             </Typography>
-            <Box sx={{ flex: 1, pl: 2, overflowY: "auto" }}>
-              {tasks.length > 0 ? (
+            <Box sx={{ flex: 1, pl: 2 }}>
+              {isAddingTask ? (
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <img
+                      src="/src/assets/home/avatar.png"
+                      alt="Avatar"
+                      style={{ width: 50, height: 50, borderRadius: "50%" }}
+                    />
+                    <Typography variant="h6" fontWeight="bold">
+                      Nhập tiêu đề bài tập
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                    >
+                      <Typography variant="body2" fontWeight="bold">
+                        Mức độ ưu tiên
+                      </Typography>
+                      <Box sx={{ display: "flex", gap: 1 }}>
+                        <Button variant="outlined">Cao</Button>
+                        <Button variant="outlined">Trung bình</Button>
+                        <Button variant="outlined">Thấp</Button>
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                    >
+                      <Typography variant="body2" fontWeight="bold">
+                        Chọn môn
+                      </Typography>
+                      <Button variant="outlined">Môn</Button>
+                    </Box>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <Typography variant="body2" fontWeight="bold">
+                      Nhắc nhở
+                    </Typography>
+                    <Button variant="outlined">Tắt</Button>
+                  </Box>
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                  >
+                    <Typography variant="body2" fontWeight="bold">
+                      Thông báo trước hạn nộp
+                    </Typography>
+                    <Button variant="outlined">Ngày</Button>
+                  </Box>
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                  >
+                    <Typography variant="body2" fontWeight="bold">
+                      Ghi chú
+                    </Typography>
+                    <textarea
+                      style={{
+                        width: "100%",
+                        height: 100,
+                        borderRadius: 8,
+                        backgroundColor: "white",
+                        color: "black",
+                      }}
+                      placeholder="Ghi chú"
+                    ></textarea>
+                  </Box>
+                </Box>
+              ) : tasks.length > 0 ? (
                 tasks.map((task) => {
                   let borderColor = "#4caf50"; // Default: Hoàn thành
                   let priority = "Trung bình"; // Default priority
@@ -214,17 +289,18 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
               <Button
                 variant="contained"
                 sx={{
-                  bgcolor: "#2c3e50",
+                  bgcolor: isAddingTask ? "#e74c3c" : "#2c3e50",
                   color: "#fff",
                   textTransform: "none",
                   fontWeight: "medium",
                   width: "80%",
                   "&:hover": {
-                    bgcolor: "#34495e",
+                    bgcolor: isAddingTask ? "#c0392b" : "#34495e",
                   },
                 }}
+                onClick={isAddingTask ? handleSaveTask : handleAddTask}
               >
-                Thêm bài tập
+                {isAddingTask ? "Lưu bài tập" : "Thêm bài tập"}
               </Button>
             </Box>
           </Box>
