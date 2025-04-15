@@ -17,14 +17,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import LeftCalendar from "./LeftCalendar";
 import { fetchTasksByDate } from "../../api/taskAPI"; // Assuming this is a named export
 import TaskAPI from "../../api/taskAPI"; // Assuming this is a named export
-import { TaskAdd } from "../../models/tabs/taskModel";
-
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  status: string; // Added status property
-}
+import { Task, TaskAdd } from "../../models/tabs/taskModel";
 
 interface TaskAddDialogProps {
   open: boolean;
@@ -363,7 +356,7 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
 
                   return (
                     <Box
-                      key={`task-${task.id}${task.title}`}
+                      key={`task-${task.user_id}${task.title}`}
                       sx={{
                         mb: 2,
                         p: 2,
@@ -394,7 +387,7 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                           {task.status}
                         </Typography>
                         <Chip
-                          label="Môn văn"
+                          label={task.subject}
                           size="small"
                           sx={{
                             bgcolor: "#e8f5e9",
