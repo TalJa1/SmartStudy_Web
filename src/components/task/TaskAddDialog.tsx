@@ -26,6 +26,7 @@ interface TaskAddDialogProps {
 const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
+  console.log("Selected date:", selectedDate);
 
   const handleDateChange = (date: Date) => {
     setSelectedDate(date);

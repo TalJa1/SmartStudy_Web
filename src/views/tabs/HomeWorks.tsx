@@ -104,7 +104,7 @@ const HomeWorks = () => {
               </TableHead>
               <TableBody>
                 {filteredTasks.map((task) => (
-                  <TableRow key={task.user_id}>
+                  <TableRow key={`${task.task_id}${task.title}${task.due_date}`} hover>
                     <TableCell>{task.title}</TableCell>
                     <TableCell>{task.subject}</TableCell>
                     <TableCell>{formatDate(task.due_date)}</TableCell>
