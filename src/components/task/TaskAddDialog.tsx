@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
   Box,
   Typography,
   Button,
@@ -47,11 +46,6 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>
-        <Typography variant="h6" fontWeight="bold">
-          Thời hạn
-        </Typography>
-      </DialogTitle>
       <DialogContent sx={{ height: "60vh" }}>
         <Box
           sx={{
@@ -64,6 +58,9 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
           {/* Left Side: Calendar and Close Button */}
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Box sx={{ flex: 1, borderRight: "1px solid #ddd", pr: 2 }}>
+              <Typography variant="h6" fontWeight="bold">
+                Thời hạn
+              </Typography>
               <LeftCalendar
                 selectedDate={selectedDate}
                 onDateChange={handleDateChange}
@@ -119,15 +116,25 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                           borderRadius: "50%",
                         }}
                       ></Box>
-                      <Typography variant="body2" fontWeight="bold" color="#4caf50">
+                      <Typography
+                        variant="body2"
+                        fontWeight="bold"
+                        color="#4caf50"
+                      >
                         Hoàn thành
                       </Typography>
                       <Chip
                         label="Môn văn"
                         size="small"
-                        sx={{ bgcolor: "#e8f5e9", color: "#4caf50", fontWeight: "bold" }}
+                        sx={{
+                          bgcolor: "#e8f5e9",
+                          color: "#4caf50",
+                          fontWeight: "bold",
+                        }}
                       />
-                      <NotificationsIcon sx={{ color: "#4caf50", fontSize: 18 }} />
+                      <NotificationsIcon
+                        sx={{ color: "#4caf50", fontSize: 18 }}
+                      />
                     </Box>
                     <Typography variant="subtitle1" fontWeight="bold">
                       {task.title}
@@ -140,13 +147,19 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
                       color="text.secondary"
                       sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
                     >
-                      <StarBorderIcon sx={{ fontSize: 16 }} /> Mức độ ưu tiên: Trung bình
+                      <StarBorderIcon sx={{ fontSize: 16 }} /> Mức độ ưu tiên:
+                      Trung bình
                     </Typography>
                   </Box>
                 ))
               ) : (
-                <Typography variant="body1" color="text.secondary">
-                  Không có bài tập nào cho ngày này.
+                <Typography
+                  variant="h6"
+                  color="text.secondary"
+                  sx={{ color: "#D55455", textAlign: "center" }}
+                >
+                  Ngày {selectedDate.getDate()} tháng{" "}
+                  {selectedDate.getMonth() + 1} năm {selectedDate.getFullYear()}
                 </Typography>
               )}
             </Box>
