@@ -46,8 +46,6 @@ const TaskAPI = {
 export const fetchTasksByDate = async (date: Date) => {
   try {
     const formattedDate = date.toLocaleDateString("en-CA"); // Format date as YYYY-MM-DD
-    console.log("Formatted date:", formattedDate); // Debugging line
-    
     const response = await apiClient.get(`/tasks/due_date/${formattedDate}`);
     return response.data;
   } catch (error) {
