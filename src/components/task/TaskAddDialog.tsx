@@ -40,6 +40,12 @@ const TaskAddDialog: React.FC<TaskAddDialogProps> = ({ open, onClose }) => {
   };
 
   useEffect(() => {
+    if (open) {
+      setSelectedDate(new Date());
+    }
+  }, [open]);
+
+  useEffect(() => {
     const fetchTasks = async () => {
       try {
         const tasksData = await fetchTasksByDate(selectedDate);
