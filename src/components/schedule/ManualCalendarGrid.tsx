@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 // src/components/ManualCalendarGrid.tsx
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import {
@@ -103,7 +102,7 @@ const ManualCalendarGrid = () => {
   }, [getEventsForDay, selectedDateForModal]); // Depend on function and selected date
 
   // --- Handlers ---
-  const handleViewChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleViewChange = (_event: React.SyntheticEvent, newValue: string) => {
     /* ...no change... */
     if (newValue === "month") setCurrentView(newValue);
     else alert(`${newValue} view not implemented in this example.`);
