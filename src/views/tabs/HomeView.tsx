@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Grid } from "@mui/material";
 import Sidebar from "../../components/Sidebar";
 import wavinghand from "../../assets/home/wavinghand.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BarChart from "../../components/BarChart";
 import progress from "../../assets/home/progress.png";
 import { getLearningData } from "../../services/home/learningService";
@@ -11,11 +10,23 @@ import EditSquareIcon from "@mui/icons-material/EditSquare";
 import avatar from "../../assets/home/avatar.png";
 import MiniCalendar from "../../components/home/MiniCalendar";
 import DardboardWidgets from "../../components/home/DardboardWidgets";
+import { UserStorageInterface } from "../../services/userStorageInterface";
 
 const HomeView = () => {
   document.title = "Tổng quan";
   const [name, setName] = useState<string>("Nguyên");
+  const [avatarImg, setAvatarImg] = useState<string>("");
   const learningData = getLearningData();
+
+  // Set the name of the user from local storage using useEffect
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const parsedData: UserStorageInterface = JSON.parse(storedData);
+      setName(parsedData.displayName ?? "Nguyên");
+      setAvatarImg(parsedData.photoURL ?? "");
+    }
+  }, []);
 
   const HomeContent = () => {
     return (
@@ -194,7 +205,16 @@ const HomeView = () => {
                 alignItems: "center",
               }}
             >
-              <img src={avatar} width={140} />
+              <Box sx={{
+                borderRadius: "50%",
+                overflow: "hidden",
+                width: "140px",
+                height: "140px",
+                mb: 2,
+              }}>
+                <img src={avatarImg ? avatarImg : avatar} width={140} />
+              </Box>
+
               <Box
                 sx={{
                   color: "#000000",

@@ -95,6 +95,14 @@ const LoginView = () => {
     const user = await signInWithGoogle();
     if (user) {
       console.log("User signed in with Google: ", user.displayName);
+      // Store user information in a single local storage item
+      const userData = {
+        uid: user.uid,
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      };
+      localStorage.setItem('userData', JSON.stringify(userData));
       navigate('/home');
     } else {
       console.log("Google sign-in failed");
