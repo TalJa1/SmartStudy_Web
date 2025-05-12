@@ -155,6 +155,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             </MenuItem>
             {/* Add other MenuItems similarly */}
             <MenuItem
+              disabled={true}
               icon={<StarIcon />}
               active={activeTab === "Mục tiêu"}
               onClick={() => handleTabChange("Mục tiêu", "/goals")}
@@ -162,6 +163,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               Mục tiêu
             </MenuItem>
             <MenuItem
+              disabled={true}
               icon={<SchoolIcon />}
               active={activeTab === "Pomodoro"}
               onClick={() => handleTabChange("Pomodoro", "/pomodoro")}
@@ -169,6 +171,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               Pomodoro
             </MenuItem>
             <MenuItem
+              disabled={true}
               icon={<AssessmentIcon />}
               active={activeTab === "Hiệu suất học tập"}
               onClick={() =>
@@ -178,6 +181,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               Hiệu suất học tập
             </MenuItem>
             <MenuItem
+              disabled={true}
               icon={<NotificationsIcon />}
               active={activeTab === "Thông báo"}
               onClick={() => handleTabChange("Thông báo", "/notifications")}
@@ -188,6 +192,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             {/* <Box sx={{ flexGrow: 1 }} />  */}
             {/* This spacer might need to be placed differently depending on layout */}
             <MenuItem
+              disabled={true}
               icon={<SettingsIcon />}
               active={activeTab === "Cài đặt"}
               onClick={() => handleTabChange("Cài đặt", "/settings")}
