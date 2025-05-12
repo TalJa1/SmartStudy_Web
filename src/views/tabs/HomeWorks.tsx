@@ -25,7 +25,14 @@ const HomeWorks = () => {
     status: "",
   });
 
-  const loggedInUserName = "Phúc Nguyễn";
+  const [loggedInUserName, setLoggedInUserName] = useState("Nguyên");
+    useEffect(() => {
+      const storedData = localStorage.getItem("userData");
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        setLoggedInUserName(parsedData.displayName ?? "Nguyên");
+      }
+    }, []);
 
   useEffect(() => {
     const fetchTasks = async () => {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // src/components/ManualCalendarGrid.tsx
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import {
   Box,
   Button,
@@ -160,8 +160,14 @@ const ManualCalendarGrid = () => {
     setModalMode("view");
   };
 
-  // --- Get User Info (Replace with actual logic) ---
-  const loggedInUserName = "Phúc Nguyễn";
+  const [loggedInUserName, setLoggedInUserName] = useState("Nguyên");
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setLoggedInUserName(parsedData.displayName ?? "Nguyên");
+    }
+  }, []);
   const userAvatarSrc = undefined; // Use placeholder from AddEventForm or pass real one
 
   const dayLabels = [

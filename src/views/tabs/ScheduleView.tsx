@@ -2,9 +2,17 @@ import { Box } from "@mui/material";
 import Sidebar from "../../components/Sidebar";
 import HeaderSearchBar from "../../components/HeaderSearchBar";
 import ManualCalendarGrid from "../../components/schedule/ManualCalendarGrid";
+import { useEffect, useState } from "react";
 
 const ScheduleView = () => {
-  const loggedInUserName = "Phúc Nguyễn";
+  const [loggedInUserName, setLoggedInUserName] = useState("Nguyên");
+  useEffect(() => {
+    const storedData = localStorage.getItem("userData");
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      setLoggedInUserName(parsedData.displayName ?? "Nguyên");
+    }
+  }, []);
 
   const ScheduleContent = () => {
     return (

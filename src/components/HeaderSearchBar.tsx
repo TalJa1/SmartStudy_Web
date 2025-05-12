@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   InputBase,
@@ -24,12 +24,36 @@ interface HeaderBarProps {
   notificationCount?: number; // Optional: Show a badge count
 }
 
+// Define the structure of the user data in local storage
+interface UserData {
+  uid: string;
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
+}
+
 const HeaderSearchBar: React.FC<HeaderBarProps> = ({
   userName,
   avatarSrc = userAvatarPlaceholder, // Default to placeholder
   notificationCount = 1, // Example: show 1 notification dot by default
 }) => {
   const theme = useTheme(); // Access theme for consistent styling
+  const [displayAvatarSrc, setDisplayAvatarSrc] = useState(avatarSrc);
+
+  useEffect(() => {
+    const storedUserData = localStorage.getItem("userData");
+    if (storedUserData) {
+      try {
+        const userData: UserData = JSON.parse(storedUserData);
+        if (userData && userData.photoURL) {
+          setDisplayAvatarSrc(userData.photoURL);
+        }
+      } catch (error) {
+        console.error("Failed to parse user data from local storage:", error);
+        // Keep the default avatar if parsing fails
+      }
+    }
+  }, []); // Empty dependency array ensures this runs once on mount
 
   return (
     <Paper
@@ -92,7 +116,7 @@ const HeaderSearchBar: React.FC<HeaderBarProps> = ({
         >
           <Avatar
             alt={userName}
-            src={avatarSrc}
+            src={displayAvatarSrc} // Use state variable here
             sx={{ width: 32, height: 32 }} // Adjust size as needed
           />
           <Typography
