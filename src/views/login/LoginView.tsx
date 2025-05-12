@@ -13,9 +13,12 @@ import Facebook from "../../assets/login/facebook.png";
 import Google from "../../assets/login/google.png";
 import React, { useEffect, useState } from "react";
 import { LoginInterface } from "../../models/login/loginInterface";
+import { signInWithGoogle } from "../../firebase";
+import { useNavigate } from "react-router-dom";
 
 const LoginView = () => {
   document.title = "Smart Login";
+  const navigate = useNavigate(); // Initialize useNavigate
   const [loginForm, setLoginForm] = useState<LoginInterface>({
     email: "PhucNguyen@gmail.com",
     password: "123",
@@ -88,6 +91,16 @@ const LoginView = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    const user = await signInWithGoogle();
+    if (user) {
+      console.log("User signed in with Google: ", user.displayName);
+      navigate('/home');
+    } else {
+      console.log("Google sign-in failed");
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -102,7 +115,7 @@ const LoginView = () => {
         container
         sx={{ borderRadius: 2, overflow: "hidden" }}
       >
-        <Grid size={{ xs: 12, md: 12 }} sx={{ mb: 5 , p:1}}>
+        <Grid size={{ xs: 12, md: 12 }} sx={{ mb: 5, p: 1 }}>
           <Box>
             <Typography component="h1" variant="h4" sx={{ fontWeight: "bold" }}>
               SMART STUDY PLANNER
@@ -236,6 +249,7 @@ const LoginView = () => {
 
                   <Button
                     variant="outlined"
+                    onClick={handleGoogleLogin}
                     sx={{
                       flex: 1,
                       mx: 1,
