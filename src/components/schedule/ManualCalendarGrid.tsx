@@ -1,4 +1,3 @@
-// src/components/ManualCalendarGrid.tsx
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import {
   Box,
@@ -31,14 +30,14 @@ import {
   isSameMonth,
   isSameDay,
   isToday,
-  getDate, // Gets day number
+  getDate,
 } from "date-fns";
 import { vi } from "date-fns/locale";
 import {
   mockCalendarEvents,
-  CalendarEvent,
-  EventCategory,
-} from "../../services/calendar/calendarData"; // Adjust path
+  type CalendarEvent,
+  type EventCategory,
+} from "../../services/calendar/calendarData";
 import EventDetailCard from "./EventDetailCard";
 import MiniCalendarModal from "./MiniCalendarModal";
 import AddEventForm from "./AddEventForm";
@@ -64,9 +63,11 @@ const getEventColor = (
 // --- Calendar Component ---
 const ManualCalendarGrid = () => {
   const theme = useTheme();
-  const [currentMonth, setCurrentMonth] = useState(new Date(2025, 3, 1));
+  const [currentMonth, setCurrentMonth] = useState(new Date()); // Initialize with current date
   const [currentView, setCurrentView] = useState("month");
   const [events, setEvents] = useState<CalendarEvent[]>(mockCalendarEvents);
+  // State for category filter
+  const [selectedCategory, setSelectedCategory] = useState<EventCategory | null>(null);
   const [monthAnchorEl, setMonthAnchorEl] = useState<null | HTMLElement>(null);
   const isMonthMenuOpen = Boolean(monthAnchorEl);
 
@@ -89,17 +90,19 @@ const ManualCalendarGrid = () => {
 
   const getEventsForDay = useCallback(
     (day: Date): CalendarEvent[] => {
-      /* ...no change... */
-      return events.filter((event) => isSameDay(event.start, day));
+      let filtered = events.filter((event) => isSameDay(event.start, day));
+      if (selectedCategory) {
+        filtered = filtered.filter((event) => event.category === selectedCategory);
+      }
+      return filtered;
     },
-    [events]
-  ); // Depend on events state
+    [events, selectedCategory]
+  );
 
   const eventsForSelectedDay = useMemo(() => {
-    // Filter events for the VIEW mode
     if (!selectedDateForModal) return [];
     return getEventsForDay(selectedDateForModal);
-  }, [getEventsForDay, selectedDateForModal]); // Depend on function and selected date
+  }, [getEventsForDay, selectedDateForModal]);
 
   // --- Handlers ---
   const handleViewChange = (_event: React.SyntheticEvent, newValue: string) => {
@@ -111,10 +114,19 @@ const ManualCalendarGrid = () => {
     setMonthAnchorEl(event.currentTarget);
   const handleMonthMenuClose = () => setMonthAnchorEl(null);
   const handleNavigate = (action: "prev" | "next" | "today") => {
-    /* ...no change... */
-    if (action === "prev") setCurrentMonth(subMonths(currentMonth, 1));
-    if (action === "next") setCurrentMonth(addMonths(currentMonth, 1));
-    if (action === "today") setCurrentMonth(new Date());
+    const today = new Date(); // Always get the current date
+
+    if (action === "prev") {
+      // Previous month from current date (today)
+      setCurrentMonth(subMonths(today, 1));
+    } else if (action === "next") {
+      // Next month from current date (today)
+      setCurrentMonth(addMonths(today, 1));
+    } else if (action === "today") {
+      // Current month (today)
+      setCurrentMonth(today);
+    }
+
     handleMonthMenuClose();
   };
   const handleEventClick = (event: CalendarEvent) => {
@@ -150,7 +162,6 @@ const ManualCalendarGrid = () => {
 
   // --- Handler to SAVE event from AddForm ---
   const handleSaveNewEvent = (newEvent: CalendarEvent) => {
-    console.log("Saving new event:", newEvent);
     setEvents((prevEvents) => [...prevEvents, newEvent]);
     // Option 1: Close modal completely after saving
     // handleCloseModal();
@@ -239,12 +250,12 @@ const ManualCalendarGrid = () => {
           startIcon={<AddIcon />}
           size="small"
           sx={{
-            backgroundColor: "#1C2A3A",
+            backgroundColor: "#256A6A",
             "&:hover": { backgroundColor: "#334257" },
             textTransform: "none",
             borderRadius: "8px",
           }}
-          onClick={() => console.log("Add Event Clicked")} // Replace with modal logic
+          onClick={() => {}} // Replace with modal logic
         >
           Thêm
         </Button>
@@ -303,35 +314,57 @@ const ManualCalendarGrid = () => {
             gap: 1,
           }}
         >
-          {" "}
-          {/* Hide filters on small screens */}
           <Chip
             label="Lịch học"
             size="small"
-            variant="outlined"
+            variant={selectedCategory === "Lịch học" ? "filled" : "outlined"}
             clickable
-            sx={{ borderColor: "#A5D6A7", color: "#4CAF50" }}
+            sx={{
+              borderColor: "#A5D6A7",
+              color: selectedCategory === "Lịch học" ? "#fff" : undefined,
+              backgroundColor: selectedCategory === "Lịch học" ? "#4CAF50" : undefined,
+              fontWeight: selectedCategory === "Lịch học" ? 600 : undefined,
+            }}
+            onClick={() => setSelectedCategory(selectedCategory === "Lịch học" ? null : "Lịch học")}
           />
           <Chip
             label="Kiểm tra"
             size="small"
-            variant="outlined"
+            variant={selectedCategory === "Kiểm tra" ? "filled" : "outlined"}
             clickable
-            sx={{ borderColor: "#EF9A9A", color: "#D32F2F" }}
+            sx={{
+              borderColor: "#EF9A9A",
+              color: selectedCategory === "Kiểm tra" ? "#fff" : undefined,
+              backgroundColor: selectedCategory === "Kiểm tra" ? "#D32F2F" : undefined,
+              fontWeight: selectedCategory === "Kiểm tra" ? 600 : undefined,
+            }}
+            onClick={() => setSelectedCategory(selectedCategory === "Kiểm tra" ? null : "Kiểm tra")}
           />
           <Chip
             label="Kỳ thi"
             size="small"
-            variant="outlined"
+            variant={selectedCategory === "Kỳ thi" ? "filled" : "outlined"}
             clickable
-            sx={{ borderColor: "#90CAF9", color: "#1976D2" }}
+            sx={{
+              borderColor: "#90CAF9",
+              color: selectedCategory === "Kỳ thi" ? "#fff" : undefined,
+              backgroundColor: selectedCategory === "Kỳ thi" ? "#1976D2" : undefined,
+              fontWeight: selectedCategory === "Kỳ thi" ? 600 : undefined,
+            }}
+            onClick={() => setSelectedCategory(selectedCategory === "Kỳ thi" ? null : "Kỳ thi")}
           />
           <Chip
             label="Sự kiện"
             size="small"
-            variant="outlined"
+            variant={selectedCategory === "Sự kiện" ? "filled" : "outlined"}
             clickable
-            sx={{ borderColor: "#FFCC80", color: "#EF6C00" }}
+            sx={{
+              borderColor: "#FFCC80",
+              color: selectedCategory === "Sự kiện" ? "#fff" : undefined,
+              backgroundColor: selectedCategory === "Sự kiện" ? "#EF6C00" : undefined,
+              fontWeight: selectedCategory === "Sự kiện" ? 600 : undefined,
+            }}
+            onClick={() => setSelectedCategory(selectedCategory === "Sự kiện" ? null : "Sự kiện")}
           />
           <IconButton
             size="small"
@@ -361,7 +394,7 @@ const ManualCalendarGrid = () => {
           sx={{
             display: "grid",
             gridTemplateColumns: "repeat(7, 1fr)", // 7 columns
-            backgroundColor: "#1C2A3A", // Dark background
+            backgroundColor: "#256A6A", // Dark background
             color: "#ffffff", // White text
             textAlign: "center",
             borderRadius: "4px 4px 0 0", // Rounded top corners
@@ -414,8 +447,7 @@ const ManualCalendarGrid = () => {
                   backgroundColor: isCurrentDay
                     ? alpha(theme.palette.primary.light, 0.1)
                     : "inherit",
-                  "&:nth-of-type(7n)": { borderRight: "none" }, // Remove right border on last column
-                  // Potentially remove bottom border on last row - harder with dynamic rows
+                  "&:nth-of-type(7n)": { borderRight: "none" },
                 }}
               >
                 {/* Day Number */}
@@ -465,7 +497,6 @@ const ManualCalendarGrid = () => {
                         }}
                       >
                         <b>{event.title}</b>
-                        {/* Optional: Display time/description */}
                         {event.description && (
                           <Typography
                             variant="caption"
@@ -480,7 +511,6 @@ const ManualCalendarGrid = () => {
                           </Typography>
                         )}
                         {!event.allDay && format(event.start, "HH:mm")}
-                        {/* Handle end time if needed */}
                       </Box>
                     );
                   })}

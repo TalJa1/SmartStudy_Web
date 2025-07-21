@@ -12,15 +12,15 @@ import AppleIcon from "@mui/icons-material/Apple";
 import Facebook from "../../assets/login/facebook.png";
 import Google from "../../assets/login/google.png";
 import React, { useEffect, useState } from "react";
-import { LoginInterface } from "../../models/login/loginInterface";
-import { signInWithGoogle } from "../../firebase";
 import { useNavigate } from "react-router-dom";
+import type { LoginInterface } from "../../models/login/loginInterface";
+import { signInWithGoogle } from "../../firebase";
 
 const LoginView = () => {
   document.title = "Smart Login";
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
   const [loginForm, setLoginForm] = useState<LoginInterface>({
-    email: "PhucNguyen@gmail.com",
+    email: "NhatKhang@gmail.com",
     password: "123",
   });
 
@@ -29,10 +29,8 @@ const LoginView = () => {
     password: "",
   });
 
-  // Add form validity state
   const [isFormValid, setIsFormValid] = useState(false);
 
-  // Validation functions
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -49,7 +47,6 @@ const LoginView = () => {
     return "";
   };
 
-  // Handle email change with validation
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;
     setLoginForm({ ...loginForm, email });
@@ -59,7 +56,6 @@ const LoginView = () => {
     });
   };
 
-  // Handle password change with validation
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const password = e.target.value;
     setLoginForm({ ...loginForm, password });
@@ -69,7 +65,6 @@ const LoginView = () => {
     });
   };
 
-  // Check form validity whenever inputs or errors change
   useEffect(() => {
     const emailError = validateEmail(loginForm.email);
     const passwordError = validatePassword(loginForm.password);
@@ -85,37 +80,40 @@ const LoginView = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Check validation before submission
     if (isFormValid) {
       console.log("Login attempt", loginForm);
     }
   };
 
   const handleGoogleLogin = async () => {
+    localStorage.removeItem("userData");
+    localStorage.removeItem("activeTab");
     const user = await signInWithGoogle();
     if (user) {
       console.log("User signed in with Google: ", user.displayName);
-      // Store user information in a single local storage item
       const userData = {
         uid: user.uid,
         displayName: user.displayName,
         email: user.email,
         photoURL: user.photoURL,
       };
-      localStorage.setItem('userData', JSON.stringify(userData));
-      navigate('/home');
+      localStorage.setItem("userData", JSON.stringify(userData));
+      navigate("/home");
     } else {
       console.log("Google sign-in failed");
     }
-  };
-
-  return (
+  };  return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: "100vw",
+        width: "100%",
+        height: "100vh",
+        margin: 0,
+        padding: 0,
+        boxSizing: "border-box",
+        overflow: "hidden",
       }}
     >
       <Grid
@@ -196,7 +194,7 @@ const LoginView = () => {
                   mb: 2,
                   py: 1.5,
                   color: "white",
-                  backgroundColor: "#092C4C",
+                  backgroundColor: "#256A6A",
                 }}
               >
                 Đăng nhập

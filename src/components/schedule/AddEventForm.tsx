@@ -15,13 +15,9 @@ import {
   Switch,
   useTheme,
   alpha,
-  SelectChangeEvent,
-  Grid, // Using Grid for layout consistency
-} from "@mui/material";
-import {
-  CalendarEvent,
-  EventCategory,
-} from "../../services/calendar/calendarData"; // Adjust path as needed
+  Grid,
+  type SelectChangeEvent, // Using Grid for layout consistency
+} from "@mui/material";// Adjust path as needed
 import {
   format,
   setHours,
@@ -34,6 +30,7 @@ import { vi } from "date-fns/locale";
 // Placeholder avatar - replace with actual logic if needed
 // Make sure this path is correct relative to your project structure
 import userAvatarPlaceholder from "../../assets/home/avatar.png";
+import type { CalendarEvent, EventCategory } from "../../services/calendar/calendarData";
 
 // --- Component Props Interface ---
 interface AddEventFormProps {
@@ -93,7 +90,7 @@ const AddEventForm: React.FC<AddEventFormProps> = ({
 
   // --- Handlers ---
   const handleCategoryChange = (
-    event: React.MouseEvent<HTMLElement>,
+    _event: React.MouseEvent<HTMLElement>,
     newCategory: EventCategory | null
   ) => {
     // Allow deselecting if needed, but toggle button group usually prevents null unless `exclusive` is off

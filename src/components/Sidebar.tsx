@@ -7,7 +7,6 @@ import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import StarIcon from "@mui/icons-material/Star";
 import SchoolIcon from "@mui/icons-material/School";
 import AssessmentIcon from "@mui/icons-material/Assessment";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
 import { Box, IconButton, useTheme } from "@mui/material"; // Import IconButton, Typography, useTheme
@@ -17,71 +16,91 @@ interface SidebarProps {
   children: React.ReactNode;
 }
 
+
 const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   const theme = useTheme(); // Access MUI theme for styling if needed
   const [activeTab, setActiveTab] = useState(() => {
-    // Retrieve active tab from localStorage or default to "Tổng quan"
-    return localStorage.getItem("activeTab") || "Tổng quan";
+    const stored = localStorage.getItem("activeTab");
+    const validTabs = [
+      "Tổng quan",
+      "Lịch học",
+      "Bài tập",
+      "Hỏi đáp",
+      "Mục tiêu",
+      "Pomodoro",
+      "Cài đặt",
+    ];
+    if (stored && validTabs.includes(stored)) {
+      return stored;
+    }
+    return "Tổng quan";
   });
   const navigate = useNavigate();
 
-  // Save activeTab to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("activeTab", activeTab);
   }, [activeTab]);
 
-  // --- State for collapsed status ---
-  // Start collapsed by default, or false if you want it expanded on large screens initially
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  // --- ---
+  const [isCollapsed, setIsCollapsed] = useState(() => window.innerWidth <= 1100);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsCollapsed(window.innerWidth <= 1100);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleTabChange = (tabName: string, route: string) => {
     setActiveTab(tabName);
     navigate(route);
-    // Optional: If on a small screen where breakPoint is active,
-    // you might want to manually close the sidebar after navigation
-    // if you were using the toggled state for mobile drawers.
-    // However, with breakPoint controlling collapse, this might not be needed.
   };
 
   const getMenuItemStyle = (isActive: boolean) => ({
-    // Use theme colors for better consistency
-    backgroundColor: isActive
-      ? "#1C1E30" // Example using theme color
-      : "transparent",
-    margin: "8px 10px", // Adjust margin slightly
+    backgroundColor: isActive ? "#256A6A" : "transparent",
+    margin: "8px 10px",
     borderRadius: "8px",
-    color: isActive
-      ? theme.palette.primary.contrastText
-      : theme.palette.text.primary, // Adjust text colors
-    // Add hover effect
-    "&:hover": {
-      backgroundColor: !isActive
-        ? theme.palette.action.hover
-        : theme.palette.action.selected,
-      // color: isActive ? theme.palette.primary.contrastText : theme.palette.primary.main, // Optional hover text color change
-    },
-    // Apply styles directly using sx prop on MenuItem for better integration
+    color: isActive ? "#ffffff" : theme.palette.text.primary,
+    border: isActive ? "2px solid #256A6A" : "2px solid transparent",
+    transition: "border-color 0.2s, background-color 0.2s, color 0.2s",
+    ...(isActive
+      ? {
+          "&:hover": {
+            backgroundColor: "#256A6A",
+          },
+        }
+      : {
+          "&:hover": {
+            border: "2px solid #256A6A",
+            backgroundColor: "transparent",
+            color: theme.palette.text.primary,
+          },
+        }),
   });
-
   return (
-    <Box sx={{ display: "flex", height: "100vh", width: "100vw" }}>
+    <Box
+      sx={{
+        display: "flex",
+        width: "100%",
+        height: "100%",
+      }}
+    >
       <S
         style={{
           height: "100%",
           borderRight: `1px solid ${theme.palette.divider}`,
         }} // Use theme for border
-        // --- Use state for collapsed ---
         collapsed={isCollapsed}
-        // --- ---
-        // collapsedWidth={"80px"} // Default is 80px, adjust if needed (60px is quite narrow)
         breakPoint="sm" // This automatically collapses below 'sm' breakpoint
         backgroundColor={theme.palette.background.paper} // Use theme background color
-        // Toggled state is more for temporary mobile drawers, breakPoint handles persistent collapse
-        // onToggle={() => console.log("Toggled")} // You might need this if using toggled state instead of breakPoint
       >
-        <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-          {/* Header Section with Toggle */}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+          }}
+        >
           <Box
             sx={{
               padding: "15px 20px",
@@ -92,7 +111,6 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
               minHeight: "64px", // Match typical header height
             }}
           >
-            {/* --- Conditionally render logo/title --- */}
             {!isCollapsed && (
               <Box
                 sx={{
@@ -122,13 +140,8 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
           <Menu
             menuItemStyles={{
               button: ({ active }) => {
-                // Apply styles directly here using sx prop logic is often cleaner
                 return getMenuItemStyle(active);
               },
-              // You can customize other parts like icons etc.
-              // icon: ({ level, active, disabled }) => {
-              //    return { color: active ? 'white' : 'black' };
-              // },
             }}
           >
             <MenuItem
@@ -153,6 +166,21 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             >
               Bài tập
             </MenuItem>
+            <MenuItem
+              icon={<AssessmentIcon />}
+              active={activeTab === "Hỏi đáp"}
+              onClick={() => handleTabChange("Hỏi đáp", "/qa")}
+            >
+              Hỏi đáp
+            </MenuItem>
+            <MenuItem
+              disabled={false}
+              icon={<SchoolIcon />}
+              active={activeTab === "Pomodoro"}
+              onClick={() => handleTabChange("Pomodoro", "/pomodoro")}
+            >
+              Pomodoro
+            </MenuItem>
             {/* Add other MenuItems similarly */}
             <MenuItem
               disabled={true}
@@ -162,35 +190,6 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
             >
               Mục tiêu
             </MenuItem>
-            <MenuItem
-              disabled={true}
-              icon={<SchoolIcon />}
-              active={activeTab === "Pomodoro"}
-              onClick={() => handleTabChange("Pomodoro", "/pomodoro")}
-            >
-              Pomodoro
-            </MenuItem>
-            <MenuItem
-              disabled={true}
-              icon={<AssessmentIcon />}
-              active={activeTab === "Hiệu suất học tập"}
-              onClick={() =>
-                handleTabChange("Hiệu suất học tập", "/performance")
-              }
-            >
-              Hiệu suất học tập
-            </MenuItem>
-            <MenuItem
-              disabled={true}
-              icon={<NotificationsIcon />}
-              active={activeTab === "Thông báo"}
-              onClick={() => handleTabChange("Thông báo", "/notifications")}
-            >
-              Thông báo
-            </MenuItem>
-            {/* Spacer Item - push settings to bottom */}
-            {/* <Box sx={{ flexGrow: 1 }} />  */}
-            {/* This spacer might need to be placed differently depending on layout */}
             <MenuItem
               disabled={true}
               icon={<SettingsIcon />}

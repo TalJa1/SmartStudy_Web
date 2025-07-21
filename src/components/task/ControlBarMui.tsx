@@ -1,205 +1,117 @@
-import { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  MenuItem,
-  TextField,
-  Chip,
-  Checkbox,
-  FormControlLabel,
-} from "@mui/material";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import AddIcon from "@mui/icons-material/Add";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import TaskAPI from "../../api/taskAPI";
+import React, { useState } from "react";
+import { Button, Box } from "@mui/material";
 import TaskAddDialog from "./TaskAddDialog";
+import FilterDialog from "./FilterDialog";
+import AddIcon from "@mui/icons-material/Add";
+import FilterListIcon from "@mui/icons-material/FilterList";
 
-function ControlBarMui({ onFilterChange }: { onFilterChange: (filters: { subject: string; priority: string; status: string }) => void }) {
-  const [showFilters, setShowFilters] = useState(false); // Default to false to hide the filter row initially
-  const [filters, setFilters] = useState({
-    subject: "",
-    priority: "",
-    status: "",
-  });
-  const [subjects, setSubjects] = useState<string[]>([]);
-  const [isAllChecked, setIsAllChecked] = useState(false); // New state to manage checkbox
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+interface filtersType {
+  subject: string;
+  priority: string;
+  status: string;
+}
 
-  useEffect(() => {
-    const fetchSubjects = async () => {
-      try {
-        const tasks: { subject: string }[] = await TaskAPI.getTasks();
-        const uniqueSubjects = Array.from(new Set(tasks.map((task) => task.subject)));
-        setSubjects(uniqueSubjects);
-      } catch (error) {
-        console.error("Error fetching subjects:", error);
-      }
-    };
+interface ControlBarMuiProps {
+  onFilterChange?: (filters: filtersType) => void;
+  onAddClick?: () => void;
+  onFilterClick?: () => void;
+  onTaskAdded?: () => void;
+}
 
-    fetchSubjects();
-  }, []);
 
-  const handleFilterClick = () => {
-    setShowFilters(!showFilters); // Toggle the visibility of the filter row
-    if (showFilters) {
-      // Reset filters when closing the filter row
-      setFilters({ subject: "", priority: "", status: "" });
-      onFilterChange({ subject: "", priority: "", status: "" });
-    }
+const ControlBarMui: React.FC<ControlBarMuiProps> = ({
+  onFilterChange,
+  onAddClick,
+  onFilterClick,
+  onTaskAdded,
+}) => {
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openFilter, setOpenFilter] = useState(false);
+  const [filters, setFilters] = useState({ subject: "", priority: "", status: "" });
+
+  const handleAddClick = () => {
+    setOpenDialog(true);
+    if (onAddClick) onAddClick();
   };
 
-  const handleFilterChange = (key: string, value: string) => {
-    const updatedFilters = { ...filters, [key]: value };
-    setFilters(updatedFilters);
-    onFilterChange(updatedFilters);
-  };
-
-  const handleAllCheckChange = (checked: boolean) => {
-    setIsAllChecked(checked);
-    if (checked) {
-      setFilters({ subject: "", priority: "", status: "" });
-      onFilterChange({ subject: "", priority: "", status: "" });
-    }
-  };
-
-  const handleDialogOpen = () => {
-    setIsDialogOpen(true);
-  };
 
   const handleDialogClose = () => {
-    setIsDialogOpen(false);
+    setOpenDialog(false);
+  };
+
+  const handleFilterClick = () => {
+    setOpenFilter(true);
+    if (onFilterClick) onFilterClick();
+  };
+
+  const handleFilterClose = () => {
+    setOpenFilter(false);
+  };
+
+  const handleApplyFilter = (newFilters: { subject: string; priority: string; status: string }) => {
+    setFilters(newFilters);
+    if (onFilterChange) onFilterChange(newFilters);
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        p: { xs: 1, sm: 2 },
-        borderBottom: "1px solid",
-        borderColor: "divider",
-        bgcolor: "background.paper",
-      }}
-    >
+    <>
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          gap: 2,
+          mb: 2,
+          pt: 2,
+          justifyContent: "flex-end",
+          width: "100%",
         }}
       >
         <Button
-          onClick={() => console.log("Date selector clicked")}
-          endIcon={<KeyboardArrowDownIcon />}
+          variant="contained"
+          startIcon={<AddIcon />}
           sx={{
+            backgroundColor: "#2E7D78",
+            borderRadius: "8px",
+            fontWeight: 500,
+            fontSize: "16px",
             textTransform: "none",
-            color: "text.primary",
-            fontWeight: "normal",
-            fontSize: "1rem",
-            p: 0,
+            px: 3,
+            boxShadow: "none",
+            "&:hover": { backgroundColor: "#25635F" },
+          }}
+          onClick={handleAddClick}
+        >
+          Thêm
+        </Button>
+        <Button
+          variant="outlined"
+          startIcon={<FilterListIcon />}
+          sx={{
+            color: "#2E7D78",
+            borderColor: "#2E7D78",
+            borderRadius: "8px",
+            fontWeight: 500,
+            fontSize: "16px",
+            textTransform: "none",
+            px: 3,
             "&:hover": {
-              bgcolor: "transparent",
+              backgroundColor: "#F5F5F5",
+              borderColor: "#25635F",
             },
           }}
+          onClick={handleFilterClick}
         >
-          Tháng 4/2025
+          Lọc
         </Button>
-
-        <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 1, sm: 2 } }}>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleDialogOpen}
-            sx={{
-              bgcolor: "#2c3e50",
-              color: "#fff",
-              "&:hover": {
-                bgcolor: "#34495e",
-              },
-            }}
-          >
-            Thêm
-          </Button>
-
-          <Button
-            variant="outlined"
-            startIcon={<FilterListIcon />}
-            onClick={handleFilterClick}
-            sx={{
-              color: "text.secondary",
-              borderColor: "grey.400",
-              "&:hover": {
-                borderColor: "grey.600",
-                bgcolor: "action.hover",
-              },
-            }}
-          >
-            Lọc
-          </Button>
-
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={isAllChecked}
-                  onChange={(e) => handleAllCheckChange(e.target.checked)}
-                />
-              }
-              label="Tất cả"
-              sx={{ minWidth: 150 }}
-            />
-          </Box>
-        </Box>
       </Box>
-
-      {showFilters && (
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center", mt: 2 }}>
-          <TextField
-            label="Chọn môn"
-            select
-            value={filters.subject}
-            onChange={(e) => handleFilterChange("subject", e.target.value)}
-            sx={{ minWidth: 150 }}
-          >
-            <MenuItem value="">Tất cả</MenuItem>
-            {subjects.map((subject) => (
-              <MenuItem key={subject} value={subject}>
-                {subject}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <TextField
-            label="Mức ưu tiên"
-            select
-            value={filters.priority}
-            onChange={(e) => handleFilterChange("priority", e.target.value)}
-            sx={{ minWidth: 150 }}
-          >
-            <MenuItem value="">Tất cả</MenuItem>
-            <MenuItem value="1">Thấp</MenuItem>
-            <MenuItem value="2">Trung bình</MenuItem>
-            <MenuItem value="3">Cao</MenuItem>
-          </TextField>
-
-          <Box sx={{ display: "flex", gap: 1 }}>
-            {["Hoàn thành", "Đang làm", "Quá hạn"].map((status) => (
-              <Chip
-                key={status}
-                label={status}
-                onClick={() => handleFilterChange("status", status)}
-                color={filters.status === status ? "primary" : "default"}
-                variant={filters.status === status ? "filled" : "outlined"}
-              />
-            ))}
-          </Box>
-        </Box>
-      )}
-
-      <TaskAddDialog open={isDialogOpen} onClose={handleDialogClose} />
-    </Box>
+      <TaskAddDialog open={openDialog} onClose={handleDialogClose} onTaskAdded={onTaskAdded} />
+      <FilterDialog
+        open={openFilter}
+        onClose={handleFilterClose}
+        onApply={handleApplyFilter}
+        initialFilters={filters}
+      />
+    </>
   );
-}
+};
 
 export default ControlBarMui;

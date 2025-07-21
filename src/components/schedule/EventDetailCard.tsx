@@ -12,8 +12,8 @@ import {
 import AccessTimeIcon from "@mui/icons-material/AccessTime"; // Using clock icon
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined"; // Bell icon
 import MoreVertIcon from "@mui/icons-material/MoreVert"; // Options icon
-import { CalendarEvent, EventCategory } from "../../services/calendar/calendarData"; // Adjust path as necessary
 import { format } from "date-fns";
+import type { CalendarEvent, EventCategory } from "../../services/calendar/calendarData";
 
 interface EventDetailCardProps {
   event: CalendarEvent;

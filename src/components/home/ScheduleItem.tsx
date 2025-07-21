@@ -2,7 +2,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import SchoolIcon from "@mui/icons-material/School"; // Graduation cap icon
-import { ScheduleItemData } from "../../services/home/learningService"; // Adjust path
+import type { ScheduleItemData } from "../../services/home/learningService";
 
 interface ScheduleItemProps {
   item: ScheduleItemData;

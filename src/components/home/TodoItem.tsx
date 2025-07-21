@@ -1,7 +1,7 @@
 // src/components/TodoItem.tsx
 import React from 'react';
 import { Box, Typography, Chip } from '@mui/material';
-import { TodoItemData, TodoStatus, PriorityLevel } from '../../services/home/learningService'; // Adjust path if needed
+import type { PriorityLevel, TodoItemData, TodoStatus } from '../../services/home/learningService';
 
 interface TodoItemProps {
   item: TodoItemData;
