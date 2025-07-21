@@ -183,7 +183,7 @@ const PromodoroMain = () => {
             label={
               <Box display="flex" alignItems="center">
                 Pomodoro{" "}
-                <Typography ml={0.5} color="#256A6A" fontWeight={700}>
+                <Typography ml={0.5} color="#1C1E30" fontWeight={700}>
                   {pomodoroCount}{" "}
                 </Typography>
               </Box>
@@ -193,7 +193,7 @@ const PromodoroMain = () => {
             label={
               <Box display="flex" alignItems="center">
                 Nghỉ ngắn{" "}
-                <Typography ml={0.5} color="#256A6A" fontWeight={700}>
+                <Typography ml={0.5} color="#1C1E30" fontWeight={700}>
                   {restCount}{" "}
                 </Typography>
               </Box>
@@ -203,7 +203,7 @@ const PromodoroMain = () => {
             label={
               <Box display="flex" alignItems="center">
                 Nghỉ dài{" "}
-                <Typography ml={0.5} color="#256A6A" fontWeight={700}>
+                <Typography ml={0.5} color="#1C1E30" fontWeight={700}>
                   {longRestCount}{" "}
                 </Typography>
               </Box>
@@ -229,8 +229,8 @@ const PromodoroMain = () => {
             }
             text={formatTime(timeLeft)}
             styles={buildStyles({
-              textColor: "#256A6A",
-              pathColor: "#256A6A",
+              textColor: "#1C1E30",
+              pathColor: "#1C1E30",
               trailColor: "#e0e7ef",
               textSize: "30px",
               strokeLinecap: "round",
@@ -309,7 +309,7 @@ const PromodoroMain = () => {
             <span style={{ fontSize: 14, minWidth: 32 }}>{Math.round(audioVolume * 100)}</span>
           </Box>
         </Box>
-        <Typography variant="subtitle2" color="#256A6A" fontWeight={700} mb={1}>
+        <Typography variant="subtitle2" color="#1C1E30" fontWeight={700} mb={1}>
           Cấp độ
         </Typography>
         <Typography variant="subtitle1" fontWeight={700} mb={3}>
@@ -324,9 +324,9 @@ const PromodoroMain = () => {
             fontSize: 22,
             fontWeight: 600,
             letterSpacing: 2,
-            boxShadow: "0 8px 24px #256A6A22",
-            bgcolor: "#256A6A",
-            "&:hover": { bgcolor: "#256A6A" },
+            boxShadow: "0 8px 24px #1C1E3022",
+            bgcolor: "#1C1E30",
+            "&:hover": { bgcolor: "#1C1E30" },
           }}
           onClick={isRunning ? handlePause : handleStart}
         >
@@ -387,7 +387,7 @@ const PromodoroMain = () => {
                 >
                   <path
                     d="M6 6L14 14M6 14L14 6"
-                    stroke="#256A6A"
+                    stroke="#1C1E30"
                     strokeWidth="2"
                     strokeLinecap="round"
                   />
@@ -420,7 +420,7 @@ const PromodoroMain = () => {
               InputProps={{ disableUnderline: true }}
             />
             <IconButton onClick={handleTaskAdd} size="small" sx={{ ml: 1 }}>
-              <span style={{ fontSize: 20, color: "#256A6A" }}>+</span>
+              <span style={{ fontSize: 20, color: "#1C1E30" }}>+</span>
             </IconButton>
           </Paper>
         </Box>

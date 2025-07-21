@@ -145,7 +145,7 @@ const QAView = () => {
                     msg.sender === "user"
                       ? "#4F8CFF"
                       : msg.sender === "ai"
-                      ? "#256A6A"
+                      ? "#1C1E30"
                       : "#fff",
                   color:
                     msg.sender === "user"
@@ -158,8 +158,8 @@ const QAView = () => {
                     msg.sender === "user"
                       ? "0 2px 8px #4F8CFF33"
                       : msg.sender === "ai"
-                      ? "0 2px 8px #256A6A55"
-                      : "0 2px 8px #256A6A22",
+                      ? "0 2px 8px #1C1E3055"
+                      : "0 2px 8px #1C1E3022",
                 }}
               >
                 {msg.sender === "ai" ? (
@@ -350,13 +350,13 @@ const QAView = () => {
           <Paper
             elevation={6}
             sx={{
-              background: "#256A6A",
+              background: "#1C1E30",
               borderRadius: 3,
               px: 3,
               pt: 1.5,
               pb: 1.5,
               width: "100%",
-              boxShadow: "0 4px 24px #256A6A",
+              boxShadow: "0 4px 24px #1C1E30",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
@@ -402,7 +402,7 @@ const QAView = () => {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: #256A6A;
+            background: #1C1E30;
             animation: dotFlashing 1s infinite linear alternate;
           }
           .dot-flashing::before {
