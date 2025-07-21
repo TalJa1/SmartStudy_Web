@@ -69,7 +69,7 @@ const ControlBarMui: React.FC<ControlBarMuiProps> = ({
           variant="contained"
           startIcon={<AddIcon />}
           sx={{
-            backgroundColor: "#2E7D78",
+            backgroundColor: "#1C1E30",
             borderRadius: "8px",
             fontWeight: 500,
             fontSize: "16px",
@@ -86,8 +86,8 @@ const ControlBarMui: React.FC<ControlBarMuiProps> = ({
           variant="outlined"
           startIcon={<FilterListIcon />}
           sx={{
-            color: "#2E7D78",
-            borderColor: "#2E7D78",
+            color: "#1C1E30",
+            borderColor: "#1C1E30",
             borderRadius: "8px",
             fontWeight: 500,
             fontSize: "16px",

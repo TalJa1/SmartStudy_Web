@@ -39,7 +39,7 @@ const MiniCalendar = () => {
         </IconButton>
         <Typography
           variant="subtitle1"
-          sx={{ fontWeight: "bold", color: "#256A6A" }}
+          sx={{ fontWeight: "bold", color: "#1C1E30" }}
         >
           {format(currentMonth, "MMMM yyyy", { locale: vi })}
         </Typography>
@@ -85,7 +85,7 @@ const MiniCalendar = () => {
                 fontSize: "0.8rem",
                 fontWeight: isSelected ? "bold" : "normal",
                 color: isSelected ? "#FFFFFF" : "#1C1E30",
-                bgcolor: isSelected ? "#256A6A" : "transparent",
+                bgcolor: isSelected ? "#1C1E30" : "transparent",
                 transition: "background-color 0.2s ease-in-out, color 0.2s ease-in-out",
                 "&:hover": {
                   bgcolor: isSelected ? "#1C1E30" : "#d0d4f7",

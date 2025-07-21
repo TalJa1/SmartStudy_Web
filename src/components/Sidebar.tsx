@@ -57,21 +57,21 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   };
 
   const getMenuItemStyle = (isActive: boolean) => ({
-    backgroundColor: isActive ? "#256A6A" : "transparent",
+    backgroundColor: isActive ? "#1C1E30" : "transparent",
     margin: "8px 10px",
     borderRadius: "8px",
     color: isActive ? "#ffffff" : theme.palette.text.primary,
-    border: isActive ? "2px solid #256A6A" : "2px solid transparent",
+    border: isActive ? "2px solid #1C1E30" : "2px solid transparent",
     transition: "border-color 0.2s, background-color 0.2s, color 0.2s",
     ...(isActive
       ? {
           "&:hover": {
-            backgroundColor: "#256A6A",
+            backgroundColor: "#1C1E30",
           },
         }
       : {
           "&:hover": {
-            border: "2px solid #256A6A",
+            border: "2px solid #1C1E30",
             backgroundColor: "transparent",
             color: theme.palette.text.primary,
           },

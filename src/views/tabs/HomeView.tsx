@@ -106,7 +106,7 @@ const HomeView = () => {
               <Box
                 display="flex"
                 alignItems="center"
-                sx={{ color: "#256A6A", fontSize: "24px", fontWeight: "700" }}
+                sx={{ color: "#1C1E30", fontSize: "24px", fontWeight: "700" }}
               >
                 Xin chào {name} <img src={wavinghand} width={30} />
               </Box>
@@ -118,7 +118,7 @@ const HomeView = () => {
               <Grid size={7}>
                 <Box
                   sx={{
-                    color: "#256A6A",
+                    color: "#1C1E30",
                     fontSize: "24px",
                     fontWeight: "700",
                   }}
@@ -130,7 +130,7 @@ const HomeView = () => {
               <Grid size={5}>
                 <Box
                   sx={{
-                    color: "#256A6A",
+                    color: "#1C1E30",
                     fontSize: "24px",
                     fontWeight: "700",
                   }}
@@ -161,7 +161,7 @@ const HomeView = () => {
             <Grid sx={{ mt: 5, width: "100%" }} container>
               <Box
                 sx={{
-                  color: "#256A6A",
+                  color: "#1C1E30",
                   fontSize: "20px",
                   fontWeight: 600,
                   width: "100%",

@@ -250,7 +250,7 @@ const ManualCalendarGrid = () => {
           startIcon={<AddIcon />}
           size="small"
           sx={{
-            backgroundColor: "#256A6A",
+            backgroundColor: "#1C1E30",
             "&:hover": { backgroundColor: "#334257" },
             textTransform: "none",
             borderRadius: "8px",
@@ -394,7 +394,7 @@ const ManualCalendarGrid = () => {
           sx={{
             display: "grid",
             gridTemplateColumns: "repeat(7, 1fr)", // 7 columns
-            backgroundColor: "#256A6A", // Dark background
+            backgroundColor: "#1C1E30", // Dark background
             color: "#ffffff", // White text
             textAlign: "center",
             borderRadius: "4px 4px 0 0", // Rounded top corners
